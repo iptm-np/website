@@ -1,7 +1,7 @@
 import DOMPurify from "dompurify";
 
 /**
- * Sanitize HTML to prevent XSS attacks while preserving
+ *  Sanitize HTML to prevent XSS attacks while preserving
  * legitimate rich-text formatting (headings, lists, links, tables, etc.).
  */
 export function sanitizeHtml(html: string): string {
