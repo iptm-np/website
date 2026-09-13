@@ -6,8 +6,8 @@ import { uploadImage } from "../../../cloudinary";
 import { Label } from "./label";
 import { Button } from "./button";
 
-// Maximum accepted image size: 200 MB, enforced before upload.
-const MAX_IMAGE_SIZE_BYTES = 200 * 1024 * 1024;
+// Maximum accepted image size: 5 MB, enforced before upload.
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 
 type ImageUploadProps = {
   label?: string;
