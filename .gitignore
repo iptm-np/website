@@ -1,0 +1,48 @@
+# dependencies
+/node_modules/
+/my-project/node_modules/
+/package-lock.json
+/yarn.lock
+/pnpm-lock.yaml
+
+# build outputs
+/dist/
+/build/
+/.cache/
+/.vite/
+
+# environment variables
+/.env
+/.env.*
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+
+# editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# generated types
+/types/generated/
+
+# Supabase local files
+/supabase/.cache/
+
+# Vite
+/.vite/
+
+# Misc
+/.history/

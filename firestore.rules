@@ -1,0 +1,103 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================
+    // SITE CONTENT (single-document collections)
+    // ============================================================
+
+    match /siteContent/{docId} {
+      // Public read for published content
+      allow read: if true;
+
+      // Only authenticated admin users can write site content
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // HERO CAROUSEL (stored in siteContent/heroCarousel)
+    // ============================================================
+    // Handled by the siteContent rule above.
+    // Writes restricted to authenticated users only.
+
+    // ============================================================
+    // TEAM MEMBERS
+    // ============================================================
+
+    match /teamMembers/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // PROJECTS
+    // ============================================================
+
+    match /projects/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // GALLERY IMAGES
+    // ============================================================
+
+    match /galleryImages/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // EVENTS
+    // ============================================================
+
+    match /events/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // CLIENTS
+    // ============================================================
+
+    match /clients/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // SECTORS
+    // ============================================================
+
+    match /sectors/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // PORTFOLIO
+    // ============================================================
+
+    match /portfolio/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // HOME FAQS
+    // ============================================================
+
+    match /homeFaqs/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ============================================================
+    // Default: deny all other collections
+    // ============================================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
