@@ -20,10 +20,9 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">Diksha Consulting and Projects Pvt. Ltd.</h3>
+            <h3 className="text-xl font-bold mb-4">IPTM Nepal Pvt. Ltd.</h3>
             <p className="text-gray-400">
-              Leading engineering consultancy providing innovative solutions for complex projects.
-            </p>
+Leading professional training and consultancy firm in Nepal, providing corporate training, professional development, capacity building, and skill development solutions for individuals and organizations.            </p>
           </div>
 
           <div>
@@ -118,7 +117,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Diksha Consulting and Projects Pvt. Ltd. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} IPTM Nepal Pvt. Ltd. All rights reserved.</p>
         </div>
       </div>
     </footer>

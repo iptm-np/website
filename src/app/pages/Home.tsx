@@ -115,51 +115,51 @@ export function Home() {
       <Helmet>
         {/* Basic meta tags — highest SEO priority */}
         <title>
-          Diksha Consulting and Projects | Engineering Consultancy Nepal
+          IPTM Nepal | Capacity Building Company in Nepal | Training Solutions
         </title>
         <meta
           name="description"
-          content="Diksha Consulting and Projects Pvt. Ltd. is a Nepal-based engineering consultancy specializing in infrastructure development, project management, water supply engineering, structural design, and technical training solutions."
+          content="IPTM Nepal is a Nepal-based capacity building organization specializing in infrastructure development, project management, water supply engineering, structural design, and technical training solutions."
         />
         <meta name="robots" content="index, follow" />
         <meta
           name="keywords"
-          content="engineering consultancy Nepal, infrastructure development Nepal, project management Nepal, structural engineering Nepal, water supply engineering Nepal, DPR consultant Nepal"
+          content="capacity building Nepal, infrastructure development Nepal, project management Nepal, structural engineering Nepal, water supply engineering Nepal, DPR consultant Nepal"
         />
-        <link rel="canonical" href="https://www.dikshacp.com.np" />
+        <link rel="canonical" href="https://www.iptmnepal.com" />
 
         {/* Open Graph — for social sharing previews */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.dikshacp.com.np" />
+        <meta property="og:url" content="https://www.iptmnepal.com" />
         <meta
           property="og:title"
-          content="Diksha Consulting and Projects | Engineering Consultancy Nepal"
+          content="IPTM Nepal | Capacity Building Company in Nepal | Training Solutions"
         />
         <meta
           property="og:description"
-          content="Expert engineering consultancy, project management, and training solutions across Nepal."
+          content="Expert capacity building and training solutions across Nepal."
         />
         <meta
           property="og:image"
-          content="https://www.dikshacp.com.np/og-image.webp"
+          content="https://www.iptmnepal.com/og-image.webp"
         />
 
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "EngineeringCompany",
-            name: "Diksha Consulting and Projects Pvt. Ltd.",
-            url: "https://www.dikshacp.com.np",
-            logo: "https://www.dikshacp.com.np/DCP_logo-1.webp",
-            image: "https://www.dikshacp.com.np/og-image.webp",
+            "@type": "CapacityBuildingOrganization",
+            name: "IPTM Nepal",
+            url: "https://www.iptmnepal.com",
+            logo: "https://www.iptmnepal.com/iptm-nepal_logo.webp",
+            image: "https://www.iptmnepal.com/og-image.webp",
             description:
-              "Engineering consultancy and infrastructure development company in Nepal.",
-            telephone: "+977-9841707077",
-            email: "consultingdiksha@gmail.com",
+              "Capacity building and training solutions provider in Nepal.",
+            telephone: "+977-9841531682",
+            email: "iptmnepal@gmail.com",
             address: {
               "@type": "PostalAddress",
-              streetAddress: "Ghattekulo-32",
+              streetAddress: "Tripureshwor",
               addressLocality: "Kathmandu",
               addressRegion: "Bagmati Province",
               postalCode: "44600",
@@ -257,19 +257,16 @@ export function Home() {
           <div className="relative z-[2] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="max-w-3xl">
               <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Engineering Consultancy & Project Experts in Nepal
+                Capacity Building Company in Nepal
               </h1>
 
               <p className="text-lg md:text-xl mb-6 text-gray-100">
-                Diksha Consulting and Projects Pvt. Ltd. delivers expert
-                engineering consultancy, project support, and industry-driven
+                IPTM Nepal delivers expert capacity building, project support, and industry-driven
                 training solutions.
               </p>
 
               <p className="text-lg md:text-xl mb-8 text-gray-200">
-                We help organizations and professionals achieve real-world
-                results through practical expertise, efficient execution, and
-                high-impact outcomes.
+                We empower organizations and professionals through **practical training, expert consultancy, and capacity-building solutions**, delivered with the guidance of **experienced expert trainers** to drive professional growth, organizational performance, and lasting impact.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">

@@ -3,7 +3,7 @@ import { Mail, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useContent } from '../contexts/ContentContext';
 import { SiInstagram, SiFacebook, SiYoutube, SiTiktok, SiX } from 'react-icons/si';
-import logoImage from '../../imports/DCP_logo-1.webp';
+import logoImage from '../../imports/iptm-nepal_logo.webp';
 
 export function Header() {
   const location = useLocation();
@@ -45,7 +45,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <Link to="/" className="flex items-center">
-            <img src={logoImage} alt="DCP Logo" className="h-12" />
+            <img src={logoImage} alt="IPTM Nepal Logo" className="h-12" />
           </Link>
 
           {/* Desktop Navigation */}

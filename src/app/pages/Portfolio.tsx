@@ -244,7 +244,7 @@ export function Portfolio() {
     const link = document.createElement('a');
 
     link.href = url;
-    link.download = 'dcp portfolio.csv';
+    link.download = 'iptmNepal-portfolio.csv';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

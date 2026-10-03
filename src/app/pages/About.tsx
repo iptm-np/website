@@ -2,8 +2,7 @@ import { Card, CardContent } from '../components/ui/card';
 import { Target, Eye, Award, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router';
 import { useContent } from '../contexts/ContentContext';
-import aboutUs from "../../imports/About_us.webp";
-import aboutUsHeader from "../../imports/aboutUsHeader.webp";
+import aboutUs from "../../imports/iptm-nepal_logo.webp";
 import { PageHeroBackground } from '../components/PageHeroBackground';
 
 export function About() {
@@ -85,19 +84,12 @@ export function About() {
 
               {/* Description */}
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                Diksha Consulting & Training Pvt. Ltd. is a leading multidisciplinary
-                engineering consulting and professional training company based in
-                Kathmandu, Nepal. We specialize in infrastructure planning, project
-                management, civil engineering consultancy, construction supervision,
-                feasibility studies, DPR preparation, and technical capacity-building
-                programs for public and private sector organizations.
+                IPTM Nepal was established in 2010 A.D. to provide  professional training, management consultancy, technical training, and capacity-building services  to individuals and organizations across Nepal. We work with  government and non-government organizations, private companies, development organizations, and professionals  from a wide range of sectors. As a professional  training and consultancy institute in Nepal , IPTM delivers  corporate training, professional development programs, skill development initiatives, workshops, seminars, technical events, and customized training solutions  designed to enhance professional competencies and strengthen organizational capabilities.
+
               </p>
 
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                From road and bridge engineering to water supply, urban development,
-                hydropower support, and engineering training, we deliver innovative,
-                sustainable, and practical solutions that contribute to Nepal’s
-                long-term development and infrastructure growth.
+               Our training and consultancy services provide individuals and organizations with practical knowledge, tools, and techniques to improve  workplace performance, productivity, leadership, management, and organizational effectiveness . Our areas of expertise include  leadership and management training, project management, technical and specialized training, human resource development, organizational development, and capacity building . By combining experienced professionals, industry-relevant knowledge, and practical learning approaches, IPTM Nepal helps organizations develop their workforce, address organizational challenges, and achieve sustainable  professional and organizational growth .
               </p>
 
               {/* Feature Points */}
@@ -148,7 +140,7 @@ export function About() {
 
                 <img
                   src={aboutUs}
-                  alt="Diksha Consulting engineering team in Nepal"
+                  alt="IPTM Nepal team"
                   className="w-full h-full object-cover"
                 />
 

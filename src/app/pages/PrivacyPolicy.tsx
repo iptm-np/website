@@ -25,13 +25,13 @@ export function PrivacyPolicy() {
   return (
     <>
       <Helmet>
-        <title>Privacy Policy | Diksha Consulting and Projects</title>
+        <title>Privacy Policy | IPTM Nepal</title>
         <meta
           name="description"
-          content="Read the privacy policy for Diksha Consulting and Projects Pvt. Ltd."
+          content="Read the privacy policy for IPTM Nepal."
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://www.dikshacp.com.np/privacy-policy" />
+        <link rel="canonical" href="https://www.iptmnepal.com/privacy-policy" />
       </Helmet>
 
       <section

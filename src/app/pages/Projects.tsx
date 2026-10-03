@@ -21,12 +21,12 @@ import {
 } from "lucide-react";
 import { PortfolioFilters as PortfolioFiltersComponent } from "../components/portfolio/PortfolioFilters";
 import { PortfolioFiltersState } from "../../types/portfolio.types";
-import project1 from "../../imports/project1.jpg";
-import project2 from "../../imports/project2.jpg";
-import project3 from "../../imports/project3.jpg";
-import project4 from "../../imports/project4.jpg";
-import project5 from "../../imports/project5.jpg";
-import project6 from "../../imports/project6.jpg";
+import project1 from "../../imports/iptm-nepal_logo.webp";
+import project2 from "../../imports/iptm-nepal_logo.webp";
+import project3 from "../../imports/iptm-nepal_logo.webp";
+import project4 from "../../imports/iptm-nepal_logo.webp";
+import project5 from "../../imports/iptm-nepal_logo.webp";
+import project6 from "../../imports/iptm-nepal_logo.webp";
 import { PageHeroBackground } from "../components/PageHeroBackground";
 
 type ProjectStatus = "upcoming" | "ongoing" | "completed";
@@ -163,7 +163,7 @@ export function Projects() {
     project6,
   ];
 
-  const whyDcp = [
+  const whyIptmNepal = [
     {
       icon: Layers,
       title: "End-to-End Delivery",
@@ -259,7 +259,7 @@ export function Projects() {
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">Our Projects Portfolio</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Explore the diverse projects successfully implemented by DCP
+              Explore the diverse projects successfully implemented by IPTM Nepal
               across various sectors, delivering innovative solutions and
               sustainable impact.
             </p>
@@ -495,7 +495,7 @@ export function Projects() {
         </section>
       )}
 
-      {/* Why DCP */}
+      {/* Why IPTM Nepal */}
       <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -506,7 +506,7 @@ export function Projects() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {whyDcp.map(({ icon: Icon, title, description }) => (
+            {whyIptmNepal.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
                 className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow"

@@ -183,13 +183,13 @@ export function Faq() {
   return (
     <>
       <Helmet>
-        <title>FAQ | Diksha Consulting and Projects</title>
+        <title>FAQ | IPTM Nepal</title>
         <meta
           name="description"
-          content="Find answers to frequently asked questions about Diksha Consulting and Projects — engineering consultancy, project management, and training services in Nepal."
+          content="Find answers to frequently asked questions about IPTM Nepal — Your Partner in Capacity Building and Infrastructure Development. Learn about our engineering consultancy, project support, and training services."
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://www.dikshacp.com.np/faq" />
+        <link rel="canonical" href="https://www.iptmnepal.com/faq" />
       </Helmet>
 
       <style>{`

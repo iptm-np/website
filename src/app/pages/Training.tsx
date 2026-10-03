@@ -144,7 +144,7 @@ export function Training() {
             <h1 className="text-4xl font-bold mb-4">Training</h1>
             <p className="text-xl text-brand-50 max-w-3xl">
               Professional development programs, workshops, and training sessions
-              organized by DCP
+              organized by IPTM Nepal to enhance skills and knowledge in various sectors.
             </p>
             <div className="mt-8">
               <p className="text-3xl font-bold">{trainingItems.length}+</p>
@@ -166,7 +166,7 @@ export function Training() {
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Explore the training programs, workshops, and professional
-              development courses organized and delivered by DCP across various
+              development courses organized and delivered by IPTM Nepal across various
               sectors
             </p>
           </div>

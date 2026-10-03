@@ -1,7 +1,5 @@
 
-  # DCP
-
-  This is a code bundle for DCP. The original project is available at https://www.figma.com/design/oFa7MkINgHA0of8KS9GEGy/DCP.
+  # IPTM Nepal
 
   ## Running the code
 
