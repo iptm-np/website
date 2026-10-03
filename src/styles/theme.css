@@ -8,14 +8,14 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
+  --primary: #2e3094;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f1fa;
+  --secondary-foreground: #2e3094;
   --muted: #ececf0;
   --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
+  --accent: #e0e2f5;
+  --accent-foreground: #2e3094;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@
   --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: oklch(0.708 0 0);
+  --ring: #6c72c6;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -33,25 +33,25 @@
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #030213;
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: #2e3094;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  
-  /* Brand colors based on #6e9cd5 */
-  --brand: #6e9cd5;
-  --brand-50: #f0f6fc;
-  --brand-100: #d4e6f4;
-  --brand-200: #b8d6ed;
-  --brand-300: #9cc7e6;
-  --brand-400: #85b1dd;
-  --brand-500: #6e9cd5;
-  --brand-600: #5888c4;
-  --brand-700: #4670a8;
-  --brand-800: #365682;
-  --brand-900: #253d5c;
+
+  /* Brand colors based on IPTM Nepal logo #2e3094 */
+  --brand: #2e3094;
+  --brand-50: #f0f1fa;
+  --brand-100: #e0e2f5;
+  --brand-200: #c2c5ea;
+  --brand-300: #9a9fdb;
+  --brand-400: #6c72c6;
+  --brand-500: #4a4fb0;
+  --brand-600: #3a3da3;
+  --brand-700: #2e3094;
+  --brand-800: #23257a;
+  --brand-900: #191b57;
 }
 
 .dark {
@@ -130,7 +130,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  
+
   /* Brand color mappings for Tailwind */
   --color-brand-50: var(--brand-50);
   --color-brand-100: var(--brand-100);

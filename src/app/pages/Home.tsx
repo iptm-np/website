@@ -266,7 +266,7 @@ export function Home() {
               </p>
 
               <p className="text-lg md:text-xl mb-8 text-gray-200">
-                We empower organizations and professionals through **practical training, expert consultancy, and capacity-building solutions**, delivered with the guidance of **experienced expert trainers** to drive professional growth, organizational performance, and lasting impact.
+                We empower organizations and professionals through practical training, expert consultancy, and capacity-building solutions, delivered with the guidance of experienced expert trainers to drive professional growth, organizational performance, and lasting impact.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
