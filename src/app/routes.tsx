@@ -12,7 +12,6 @@ import { Team } from './pages/Team';
 import { TeamMemberDetail } from './pages/TeamMemberDetail';
 import { CompanyProfile } from './pages/CompanyProfile';
 import { CompanySector } from './pages/CompanySector';
-import { ConsultingService } from './pages/ConsultingService';
 import { PortfolioItemDetail } from './pages/PortfolioItemDetail';
 import { AdminLayout } from './pages/admin/Dashboard';
 import { DashboardHome } from './pages/admin/DashboardHome';
@@ -46,8 +45,6 @@ export const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: 'about', Component: About },
       { path: 'company-sector', Component: CompanySector },
-      { path: 'consulting', Component: ConsultingService },
-      { path: 'consulting/:slug', element: <PortfolioItemDetail expectedType="consulting" /> },
       { path: 'company-profile', Component: CompanyProfile },
       { path: 'team', Component: Team },
       { path: 'team/:slug', Component: TeamMemberDetail },

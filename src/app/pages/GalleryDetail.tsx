@@ -3,11 +3,11 @@ import { Link, useParams } from "react-router";
 import { ArrowLeft, Images } from "lucide-react";
 import { useContent } from "../contexts/ContentContext";
 import { Lightbox } from "../components/Lightbox";
-import { PortfolioItem } from "../../types/portfolio.types";
+import { PublicPortfolioType } from "../../types/portfolio.types";
+import { getPublicPortfolioItems } from "../../services/portfolio.service";
 
-const typeBadgeLabels: Record<PortfolioItem["type"], string> = {
+const typeBadgeLabels: Record<PublicPortfolioType, string> = {
   project: "Project",
-  consulting: "Consulting",
   training: "Training",
 };
 
@@ -17,7 +17,7 @@ export function GalleryDetail() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const item = useMemo(
-    () => portfolio.find((p) => p.slug === slug),
+    () => getPublicPortfolioItems(portfolio).find((p) => p.slug === slug),
     [portfolio, slug],
   );
 

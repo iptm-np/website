@@ -3,6 +3,7 @@ import {
   PortfolioFilters,
   PortfolioSortKey,
   PortfolioSortOrder,
+  PublicPortfolioItem,
 } from '../types/portfolio.types';
 
 /** Strip HTML tags for plain-text search */
@@ -17,10 +18,10 @@ function stripHtml(html: string): string {
 /**
  * Filter portfolio items based on multiple criteria
  */
-export function filterPortfolioItems(
-  items: PortfolioItem[],
+export function filterPortfolioItems<T extends PortfolioItem>(
+  items: T[],
   filters: PortfolioFilters
-): PortfolioItem[] {
+): T[] {
   return items.filter((item) => {
     // Type filter
     if (filters.type && filters.type !== 'all' && item.type !== filters.type) {
@@ -115,6 +116,12 @@ export function getItemsByType(
   type: 'project' | 'consulting' | 'training'
 ): PortfolioItem[] {
   return items.filter((item) => item.type === type);
+}
+
+export function getPublicPortfolioItems(items: PortfolioItem[]): PublicPortfolioItem[] {
+  return items.filter(
+    (item): item is PublicPortfolioItem => item.type !== 'consulting',
+  );
 }
 
 /**
@@ -212,7 +219,6 @@ export function getPortfolioStats(items: PortfolioItem[]) {
   return {
     totalItems: items.length,
     projects: getItemsByType(items, 'project').length,
-    consulting: getItemsByType(items, 'consulting').length,
     training: getItemsByType(items, 'training').length,
     totalContractValue: items.reduce((sum, item) => {
       const amount = parseFloat((item.contractAmount || '').replace(/,/g, '')) || 0;

@@ -73,8 +73,7 @@ const backButtonClass = `
   active:scale-[0.98]
 `;
 
-// Config-driven type-details block — replaces three near-identical
-// Project/Consulting/Training sections with a single render path.
+// Config-driven type-details block keeps project and training fields aligned.
 const typeConfig: Record<
   PortfolioType,
   { label: string; typeField: keyof PortfolioItem; typeLabel: string }
@@ -529,9 +528,6 @@ export function PortfolioForm() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="project">Project</SelectItem>
-                      <SelectItem value="consulting">
-                        Consulting Services
-                      </SelectItem>
                       <SelectItem value="training">Training</SelectItem>
                     </SelectContent>
                   </Select>
@@ -617,8 +613,7 @@ export function PortfolioForm() {
               </div>
             </div>
 
-            {/* Type-specific details — single config-driven block replaces the
-               three near-duplicated Project/Consulting/Training sections */}
+            {/* Type-specific details share one render path for project and training items. */}
             <div className="border-t pt-6">
               <div className="space-y-3 rounded-lg border p-4">
                 <h3 className="font-semibold">{activeTypeConfig.label}</h3>

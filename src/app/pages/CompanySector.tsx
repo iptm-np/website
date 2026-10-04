@@ -101,7 +101,7 @@ export function CompanySector() {
     },
     {
       title: 'Private Sector',
-      description: 'Commercial and industrial facility design and consulting',
+      description: 'Commercial and industrial facility design',
       count: '30+',
     },
   ];
@@ -116,7 +116,7 @@ export function CompanySector() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold mb-4">Company Sectors</h1>
           <p className="text-xl text-brand-50 max-w-3xl">
-            We serve diverse sectors with specialized engineering and consulting expertise
+            We serve diverse sectors with specialized engineering expertise
           </p>
         </div>
       </PageHeroBackground>

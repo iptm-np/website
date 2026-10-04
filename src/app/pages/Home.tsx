@@ -11,16 +11,16 @@ import {
 import { HomeFaqDisplay } from "./admin/FaqsSection";
 import { CheckCircle, Users, Award, Lightbulb, ChevronLeft, ChevronRight } from "lucide-react";
 import { useContent } from "../contexts/ContentContext";
-import { PortfolioItem, PortfolioType } from "../../types/portfolio.types";
+import { PublicPortfolioItem, PublicPortfolioType } from "../../types/portfolio.types";
+import { getPublicPortfolioItems } from "../../services/portfolio.service";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
 const engineering = new URL("../../imports/engineering.webp", import.meta.url)
   .href;
 import { Helmet } from "react-helmet-async";
 import { slugify } from "../../utils/slug";
 
-const portfolioTypeLabels: Record<PortfolioType, string> = {
+const portfolioTypeLabels: Record<PublicPortfolioType, string> = {
   project: "Project",
-  consulting: "Consulting",
   training: "Training",
 };
 const FEATURED_WORK_SCROLL_DURATION = 80_000;
@@ -60,7 +60,9 @@ export function Home() {
     };
   }, [heroApi]);
 
-  const featuredPortfolioItems = portfolio.filter((item) => item.displayOnHome);
+  const featuredPortfolioItems = getPublicPortfolioItems(portfolio).filter(
+    (item) => item.displayOnHome,
+  );
   const featuredItemsPerLoop =
     featuredPortfolioItems.length > 0
       ? Math.max(1, Math.ceil(4 / featuredPortfolioItems.length))
@@ -96,9 +98,8 @@ export function Home() {
       FEATURED_WORK_SCROLL_DURATION;
   };
 
-  const getPortfolioLink = (item: PortfolioItem) => {
+  const getPortfolioLink = (item: PublicPortfolioItem) => {
     if (item.type === "project") return `/projects/${item.slug}`;
-    if (item.type === "consulting") return `/consulting/${item.slug}`;
     return `/training/${item.slug}`;
   };
 
@@ -409,7 +410,7 @@ export function Home() {
               <div className="text-center sm:text-left">
                 <h2 className="text-3xl font-bold mb-4">Featured Work</h2>
                 <p className="text-gray-600">
-                  Explore our featured projects, consulting services, and training.
+                  Explore our featured projects and training programs.
                 </p>
               </div>
               <div

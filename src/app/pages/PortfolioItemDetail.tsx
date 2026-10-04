@@ -9,30 +9,26 @@ import {
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useContent } from "../contexts/ContentContext";
-import { PortfolioItem, PortfolioType } from "../../types/portfolio.types";
-import { formatContractAmount } from "../../services/portfolio.service";
+import { PublicPortfolioItem, PublicPortfolioType } from "../../types/portfolio.types";
+import { formatContractAmount, getPublicPortfolioItems } from "../../services/portfolio.service";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
 
-const typeLabels: Record<PortfolioType, string> = {
+const typeLabels: Record<PublicPortfolioType, string> = {
   project: "Project",
-  consulting: "Consulting Assignment",
   training: "Training Program",
 };
 
-const backLinks: Record<PortfolioType, string> = {
+const backLinks: Record<PublicPortfolioType, string> = {
   project: "/portfolio",
-  consulting: "/portfolio",
   training: "/portfolio",
 };
 
 interface PortfolioItemDetailProps {
-  expectedType?: PortfolioType;
+  expectedType: PublicPortfolioType;
 }
 
-function getSpecificLabel(item: PortfolioItem) {
+function getSpecificLabel(item: PublicPortfolioItem) {
   if (item.type === "project") return item.projectType || "Engineering Project";
-  if (item.type === "consulting")
-    return item.serviceType || "Consulting Service";
   return item.trainingType || "Training & Capacity Building";
 }
 
@@ -42,10 +38,10 @@ export function PortfolioItemDetail({
   const { slug } = useParams();
   const { portfolio, clients } = useContent();
 
-  const item = portfolio.find(
+  const item = getPublicPortfolioItems(portfolio).find(
     (portfolioItem) =>
       portfolioItem.slug === slug &&
-      (!expectedType || portfolioItem.type === expectedType),
+      portfolioItem.type === expectedType,
   );
 
   if (!item) {

@@ -5,7 +5,6 @@ import {
   BriefcaseBusiness,
   CalendarClock,
   GraduationCap,
-  Users,
   ArrowDown,
   ArrowUp,
 } from 'lucide-react';
@@ -13,11 +12,12 @@ import { Button } from '../components/ui/button';
 import { useContent } from '../contexts/ContentContext';
 import {
   PortfolioFiltersState,
-  PortfolioItem,
-  PortfolioType,
+  PublicPortfolioItem,
+  PublicPortfolioType,
 } from '../../types/portfolio.types';
 import {
   filterPortfolioItems,
+  getPublicPortfolioItems,
   getUniqueFilterValues,
 } from '../../services/portfolio.service';
 import { slugify } from '../../utils/slug';
@@ -29,24 +29,20 @@ const COMPANY_START_BS_YEAR = 2072;
 const NEPALI_NEW_YEAR_MONTH_INDEX = 3;
 const NEPALI_NEW_YEAR_DAY = 14;
 
-const categoryLabels: Record<PortfolioType, string> = {
+const categoryLabels: Record<PublicPortfolioType, string> = {
   project: 'Project',
-  consulting: 'Consulting',
   training: 'Training',
 };
 
-const categoryStyles: Record<PortfolioType, string> = {
+const categoryStyles: Record<PublicPortfolioType, string> = {
   project: 'bg-blue-50 text-blue-700 ring-blue-100',
-  consulting: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
   training: 'bg-violet-50 text-violet-700 ring-violet-100',
 };
 
-function getItemLink(item: PortfolioItem) {
+function getItemLink(item: PublicPortfolioItem) {
   switch (item.type) {
     case 'project':
       return `/projects/${item.slug}`;
-    case 'consulting':
-      return `/consulting/${item.slug}`;
     case 'training':
       return `/training/${item.slug}`;
     default:
@@ -71,7 +67,7 @@ function escapeCsvValue(value?: string | number | boolean) {
   return `"${text.replace(/"/g, '""')}"`;
 }
 
-function getPortfolioCsv(items: PortfolioItem[], clients: { id: string; name: string }[]) {
+function getPortfolioCsv(items: PublicPortfolioItem[], clients: { id: string; name: string }[]) {
   const headers = ['S.N', 'Work', 'Type', 'Fiscal Year', 'Client', 'Sector', 'Partner Firms'];
 
   const rows = items.map((item, index) => [
@@ -95,6 +91,10 @@ export function Portfolio() {
   const selectedClientParam = searchParams.get('client') || undefined;
   const selectedSectorParam = searchParams.get('sector') || undefined;
   const { portfolio, clients, sectors, pageHeroImages } = useContent();
+  const publicPortfolio = useMemo(
+    () => getPublicPortfolioItems(portfolio),
+    [portfolio],
+  );
   const [page, setPage] = useState(1);
   const [fySortOrder, setFySortOrder] = useState<'desc' | 'asc'>('desc');
   const [filters, setFilters] = useState<PortfolioFiltersState>({
@@ -106,7 +106,7 @@ export function Portfolio() {
   });
 
 
-  const filterValues = useMemo(() => getUniqueFilterValues(portfolio), [portfolio]);
+  const filterValues = useMemo(() => getUniqueFilterValues(publicPortfolio), [publicPortfolio]);
 
   const selectedClientId = useMemo(() => {
     if (!selectedClientParam) return undefined;
@@ -150,7 +150,7 @@ export function Portfolio() {
   }, [selectedClientId, selectedSector]);
 
   const filteredItems = useMemo(() => {
-    const filtered = filterPortfolioItems(portfolio, filters);
+    const filtered = filterPortfolioItems(publicPortfolio, filters);
 
     return [...filtered].sort((a, b) => {
       const yearA = getFiscalYearSortValue(a.fiscalYear);
@@ -160,24 +160,22 @@ export function Portfolio() {
         ? yearB.localeCompare(yearA)
         : yearA.localeCompare(yearB);
     });
-  }, [portfolio, filters, fySortOrder]);
+  }, [publicPortfolio, filters, fySortOrder]);
 
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
   const visibleItems = filteredItems.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const yearsOfExperience = getCurrentBsYear() - COMPANY_START_BS_YEAR;
 
   const stats = useMemo(() => {
-    const projects = portfolio.filter((item) => item.type === 'project').length;
-    const consultingServices = portfolio.filter((item) => item.type === 'consulting').length;
-    const trainingPrograms = portfolio.filter((item) => item.type === 'training').length;
+    const projects = publicPortfolio.filter((item) => item.type === 'project').length;
+    const trainingPrograms = publicPortfolio.filter((item) => item.type === 'training').length;
 
     return [
       { label: 'Projects', value: `${projects}+`, icon: BriefcaseBusiness },
-      { label: 'Consulting Services', value: `${consultingServices}+`, icon: Users },
       { label: 'Training Programs', value: `${trainingPrograms}+`, icon: GraduationCap },
       { label: 'Years of Experience', value: `${yearsOfExperience}+`, icon: CalendarClock },
     ];
-  }, [portfolio]);
+  }, [publicPortfolio]);
 
   const updateFilters = (updates: Partial<PortfolioFiltersState>) => {
     if (Object.prototype.hasOwnProperty.call(updates, 'client')) {

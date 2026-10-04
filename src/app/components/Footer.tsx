@@ -88,11 +88,6 @@ Leading professional training and consultancy firm in Nepal, providing corporate
                 </Link>
               </li>
               <li>
-                <Link to="/consulting" className="hover:text-white transition-colors">
-                  Consulting
-                </Link>
-              </li>
-              <li>
                 <Link to="/training" className="hover:text-white transition-colors">
                   Training
                 </Link>

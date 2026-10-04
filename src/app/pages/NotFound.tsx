@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
-import { Home, Briefcase, Calendar, FileText, Building2 } from 'lucide-react';
+import { Home, Briefcase, Calendar, Building2 } from 'lucide-react';
 
 // Construction Crane Animation Component
 function ConstructionCrane() {
@@ -101,18 +101,10 @@ export function NotFound() {
     {
       title: 'Explore Portfolio',
       description:
-        'Browse our complete portfolio of projects, consulting assignments, training programs, and events',
+        'Browse our portfolio of projects, training programs, and events',
       icon: Briefcase,
       path: '/portfolio',
       color: 'from-brand-500 to-brand-600',
-    },
-    {
-      title: 'Consulting',
-      description:
-        'Explore our professional engineering and management consulting services',
-      icon: FileText,
-      path: '/consulting',
-      color: 'from-blue-500 to-blue-600',
     },
     {
       title: 'Projects',

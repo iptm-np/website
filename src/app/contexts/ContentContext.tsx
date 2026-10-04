@@ -106,7 +106,6 @@ export interface PageHeroImages {
   about?: string;
   companyProfile?: string;
   portfolio?: string;
-  consulting?: string;
   training?: string;
   projects?: string;
   contact?: string;

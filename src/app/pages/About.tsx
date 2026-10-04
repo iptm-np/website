@@ -34,7 +34,7 @@ export function About() {
               </h1>
 
               <p className="text-lg md:text-2xl leading-relaxed mb-6">
-                A multidisciplinary engineering and management consulting firm
+                A multidisciplinary engineering and management organization
                 dedicated to excellence.
               </p>
             </div>
@@ -188,7 +188,7 @@ export function About() {
                   <div className="text-sm text-gray-600 space-y-3 text-left">
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Leading consulting firm in engineering and management</p>
+                      <p>Leading organization in engineering and management</p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />

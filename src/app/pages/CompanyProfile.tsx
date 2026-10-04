@@ -20,28 +20,6 @@ export function CompanyProfile() {
 
   const services = [
     {
-      category: 'Engineering Consultancy & Infrastructure Design',
-      href: '/consulting',
-      items: [
-        'Detailed Engineering Design & Drawings',
-        'Feasibility Studies & Master Planning',
-        'Cost Estimation & BOQ Preparation',
-        'Infrastructure Planning & Development',
-        'Water Supply & Sanitation Systems',
-        'Structural, Architectural & MEP Design',
-        'Construction Supervision',
-      ],
-    },
-    {
-      category: 'Procurement & Bid Support',
-      href: '/consulting',
-      items: [
-        'Preparation of Bid Documents',
-        'Bid Evaluation & Procurement Support',
-        'PPP Advisory Services',
-      ],
-    },
-    {
       category: 'Civil Engineering & Infrastructure Projects',
       href: '/projects',
       items: [
@@ -106,7 +84,7 @@ export function CompanyProfile() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Core Services</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              We offer comprehensive engineering and management consulting services across multiple disciplines
+              We deliver engineering, infrastructure, and professional training services across multiple disciplines
             </p>
           </div>
 
