@@ -423,6 +423,14 @@ export function PortfolioForm() {
     if (form.startDate && form.endDate && form.endDate < form.startDate) {
       nextErrors.endDate = "End date cannot be before start date";
     }
+    if (form.type === "training" && form.displayOnHome) {
+      if (!form.startDate) {
+        nextErrors.startDate = "Start date is required for featured training";
+      }
+      if (!form.endDate) {
+        nextErrors.endDate = "End date is required for featured training";
+      }
+    }
 
     return nextErrors;
   };
@@ -677,10 +685,11 @@ export function PortfolioForm() {
                   }
                 />
                 <span>
-                  <span className="font-medium">Display on Home Screen</span>
+                  <span className="font-medium">Feature on Homepage</span>
                   <p className="text-gray-500">
-                    Marking this item will make it eligible for the home
-                    screen featured section (up to 4 items per type).
+                    {form.type === "training"
+                      ? "Show this training in Upcoming Training until its end date has passed. Start and end dates are required."
+                      : "Show this item in the homepage Featured Work section."}
                   </p>
                 </span>
               </label>
