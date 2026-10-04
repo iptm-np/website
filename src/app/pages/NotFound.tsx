@@ -107,11 +107,11 @@ export function NotFound() {
       color: 'from-brand-500 to-brand-600',
     },
     {
-      title: 'Projects',
+      title: 'Events & Workshops',
       description:
-        'View our engineering, infrastructure, and development projects',
+        'Explore events, workshops, seminars, and learning programs',
       icon: Building2,
-      path: '/projects',
+      path: '/events-workshops',
       color: 'from-green-500 to-green-600',
     },
     {

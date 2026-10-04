@@ -21,7 +21,7 @@ export function CompanyProfile() {
   const services = [
     {
       category: 'Civil Engineering & Infrastructure Projects',
-      href: '/projects',
+      href: '/portfolio',
       items: [
         'Roads, Bridges & Urban Infrastructure',
         'Water Supply & Sanitation Projects',
@@ -31,7 +31,7 @@ export function CompanyProfile() {
     },
     {
       category: 'Design & Build Projects',
-      href: '/projects',
+      href: '/portfolio',
       items: [
         'Turnkey Infrastructure Solutions',
         'Detailed Engineering Design Projects',

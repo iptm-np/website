@@ -168,7 +168,7 @@ export function Contact() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
             <p className="text-xl text-brand-50 max-w-3xl">
-              Get in touch with us for any inquiries or project consultations
+              Get in touch with us for any inquiries or project information
             </p>
           </div>
 
@@ -374,7 +374,7 @@ export function Contact() {
 
                       <Input
                         name="subject"
-                        placeholder="e.g. Project consultation, quotation, etc."
+                        placeholder="e.g. Project inquiry, quotation, etc."
                         value={formData.subject}
                         onChange={handleChange}
                         className="mt-2 h-12 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition"

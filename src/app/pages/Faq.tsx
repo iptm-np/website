@@ -186,7 +186,7 @@ export function Faq() {
         <title>FAQ | IPTM Nepal</title>
         <meta
           name="description"
-          content="Find answers to frequently asked questions about IPTM Nepal — Your Partner in Capacity Building and Infrastructure Development. Learn about our engineering consultancy, project support, and training services."
+          content="Find answers to frequently asked questions about IPTM Nepal — Your Partner in Capacity Building and Infrastructure Development. Learn about our project support and training services."
         />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://www.iptmnepal.com/faq" />
@@ -253,7 +253,7 @@ export function Faq() {
           </h1>
 
           <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '1.0625rem', maxWidth: '520px' }}>
-            Everything you need to know about our engineering consultancy, project support, and
+            Everything you need to know about our project support and
             training services.
           </p>
 

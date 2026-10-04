@@ -22,8 +22,8 @@ export function Header() {
     { path: '/about', label: 'About Us' },
     { path: '/company-profile', label: 'Company Profile' },
     { path: '/portfolio', label: 'Portfolio' },
-    { path: '/projects', label: 'Projects' },
     { path: '/training', label: 'Training' },
+    { path: '/events-workshops', label: 'Events & Workshops' },
     { path: '/gallery', label: 'Gallery' },
     { path: '/contact', label: 'Contact Us' },
   ];

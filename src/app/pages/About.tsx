@@ -84,18 +84,18 @@ export function About() {
 
               {/* Description */}
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                IPTM Nepal was established in 2010 A.D. to provide  professional training, management consultancy, technical training, and capacity-building services  to individuals and organizations across Nepal. We work with  government and non-government organizations, private companies, development organizations, and professionals  from a wide range of sectors. As a professional  training and consultancy institute in Nepal , IPTM delivers  corporate training, professional development programs, skill development initiatives, workshops, seminars, technical events, and customized training solutions  designed to enhance professional competencies and strengthen organizational capabilities.
+                IPTM Nepal was established in 2010 A.D. to provide professional training and capacity-building services to individuals and organizations across Nepal. We work with government and non-government organizations, private companies, development organizations, and professionals from a wide range of sectors. IPTM delivers corporate training, professional development programs, skill development initiatives, workshops, seminars, technical events, and customized training solutions designed to enhance professional competencies and strengthen organizational capabilities.
 
               </p>
 
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-               Our training and consultancy services provide individuals and organizations with practical knowledge, tools, and techniques to improve  workplace performance, productivity, leadership, management, and organizational effectiveness . Our areas of expertise include  leadership and management training, project management, technical and specialized training, human resource development, organizational development, and capacity building . By combining experienced professionals, industry-relevant knowledge, and practical learning approaches, IPTM Nepal helps organizations develop their workforce, address organizational challenges, and achieve sustainable  professional and organizational growth .
+               Our training programs provide individuals and organizations with practical knowledge, tools, and techniques to improve workplace performance, productivity, leadership, management, and organizational effectiveness. Our areas of expertise include leadership and management training, project management, technical and specialized training, human resource development, organizational development, and capacity building. By combining experienced professionals, industry-relevant knowledge, and practical learning approaches, IPTM Nepal helps organizations develop their workforce and achieve sustainable professional growth.
               </p>
 
               {/* Feature Points */}
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {[
-                  "Engineering Consultancy",
+                  "Infrastructure Development",
                   "Project Management",
                   "Infrastructure Development",
                   "Professional Training",
@@ -157,8 +157,8 @@ export function About() {
                   </h3>
 
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    Delivering consultancy, infrastructure solutions, and technical
-                    training with innovation, sustainability, and professional excellence.
+                    Delivering infrastructure solutions and professional training
+                    with innovation, sustainability, and excellence.
                   </p>
                 </div>
               </div>

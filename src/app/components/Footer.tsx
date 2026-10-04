@@ -22,7 +22,7 @@ export function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">IPTM Nepal Pvt. Ltd.</h3>
             <p className="text-gray-400">
-Leading professional training and consultancy firm in Nepal, providing corporate training, professional development, capacity building, and skill development solutions for individuals and organizations.            </p>
+Leading professional training and capacity-building firm in Nepal, providing corporate training, professional development, and skill development solutions for individuals and organizations.            </p>
           </div>
 
           <div>
@@ -93,8 +93,8 @@ Leading professional training and consultancy firm in Nepal, providing corporate
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="hover:text-white transition-colors">
-                  Projects
+                <Link to="/events-workshops" className="hover:text-white transition-colors">
+                  Events & Workshops
                 </Link>
               </li>
               <li>

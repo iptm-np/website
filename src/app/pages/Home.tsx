@@ -125,7 +125,7 @@ export function Home() {
         <meta name="robots" content="index, follow" />
         <meta
           name="keywords"
-          content="capacity building Nepal, infrastructure development Nepal, project management Nepal, structural engineering Nepal, water supply engineering Nepal, DPR consultant Nepal"
+          content="capacity building Nepal, infrastructure development Nepal, project management Nepal, structural engineering Nepal, water supply engineering Nepal, DPR preparation Nepal"
         />
         <link rel="canonical" href="https://www.iptmnepal.com" />
 
@@ -247,7 +247,7 @@ export function Home() {
             <div className="absolute inset-0">
               <img
                 src={engineering}
-                alt="Engineering Consultancy"
+                alt="Infrastructure Development"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/40"></div>
@@ -267,7 +267,7 @@ export function Home() {
               </p>
 
               <p className="text-lg md:text-xl mb-8 text-gray-200">
-                We empower organizations and professionals through practical training, expert consultancy, and capacity-building solutions, delivered with the guidance of experienced expert trainers to drive professional growth, organizational performance, and lasting impact.
+                We empower organizations and professionals through practical training and capacity-building solutions, delivered by experienced trainers to drive professional growth, organizational performance, and lasting impact.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">

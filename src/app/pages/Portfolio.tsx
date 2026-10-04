@@ -263,7 +263,7 @@ export function Portfolio() {
               <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-16">
                 <h1 className="text-4xl font-bold mb-4">Our Portfolio</h1>
                 <p className="text-xl text-brand-50 max-w-3xl">
-                 {yearsOfExperience}+ Years of Engineering Consultancy, Infrastructure Development,
+                 {yearsOfExperience}+ Years of Infrastructure Development,
               Project Management, and Capacity-Building Experience Across Nepal.
                 </p>
               </div>
@@ -271,7 +271,7 @@ export function Portfolio() {
             </PageHeroBackground>
 
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {stats.map(({ label, value, icon: Icon }) => (
             <div
               key={label}

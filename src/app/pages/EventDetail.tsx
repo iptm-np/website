@@ -6,14 +6,18 @@ import { Calendar, Clock, CheckCircle, ArrowLeft, Tag } from 'lucide-react';
 import { PortfolioItemDetail } from './PortfolioItemDetail';
 import { SanitizedHtml } from '../components/ui/sanitized-html';
 
-export function EventDetail() {
+interface EventDetailProps {
+  backTo?: string;
+}
+
+export function EventDetail({ backTo = "/training" }: EventDetailProps) {
   const { slug } = useParams();
   const { events } = useContent();
 
   const event = events.find((e) => e.slug === slug);
 
   if (!event) {
-    return <PortfolioItemDetail expectedType="training" />;
+    return <PortfolioItemDetail expectedType="training" backTo={backTo} />;
   }
 
   return (
@@ -21,10 +25,10 @@ export function EventDetail() {
       {/* Header Section */}
       <section className="bg-gradient-to-r from-brand-500 to-brand-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link to="/training">
+          <Link to={backTo}>
             <Button variant="secondary" size="sm" className="mb-6">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Training
+              Back to {backTo === "/events-workshops" ? "Events & Workshops" : "Training"}
             </Button>
           </Link>
           <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
@@ -136,7 +140,7 @@ export function EventDetail() {
               .filter((e) => e.id !== event.id)
               .slice(0, 3)
               .map((relatedEvent) => (
-                <Link key={relatedEvent.id} to={`/training/${relatedEvent.slug}`}>
+                <Link key={relatedEvent.id} to={`${backTo}/${relatedEvent.slug}`}>
                   <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-start mb-3">

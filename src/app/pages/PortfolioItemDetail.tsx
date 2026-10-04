@@ -25,6 +25,7 @@ const backLinks: Record<PublicPortfolioType, string> = {
 
 interface PortfolioItemDetailProps {
   expectedType: PublicPortfolioType;
+  backTo?: string;
 }
 
 function getSpecificLabel(item: PublicPortfolioItem) {
@@ -34,6 +35,7 @@ function getSpecificLabel(item: PublicPortfolioItem) {
 
 export function PortfolioItemDetail({
   expectedType,
+  backTo,
 }: PortfolioItemDetailProps) {
   const { slug } = useParams();
   const { portfolio, clients } = useContent();
@@ -82,7 +84,7 @@ export function PortfolioItemDetail({
         )}
  
         <div className="relative mx-auto flex max-w-7xl flex-col justify-end px-4 py-12 sm:px-6 lg:px-8">
-          <Link to={backLinks[item.type]}>
+          <Link to={backTo || backLinks[item.type]}>
             <Button variant="secondary" size="sm" className="mb-8 w-fit">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Portfolio

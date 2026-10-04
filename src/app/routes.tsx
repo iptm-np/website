@@ -3,7 +3,7 @@ import { Root } from './Root';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Training } from './pages/Training';
-import { Projects } from './pages/Projects';
+import { EventsWorkshops } from './pages/EventsWorkshops';
 import { ProjectDetail } from './pages/ProjectDetail';
 import { EventDetail } from './pages/EventDetail';
 import { Contact } from './pages/Contact';
@@ -50,7 +50,12 @@ export const router = createBrowserRouter([
       { path: 'team/:slug', Component: TeamMemberDetail },
       { path: 'training', Component: Training },
       { path: 'training/:slug', Component: EventDetail },
-      { path: 'projects', Component: Projects },
+      { path: 'events-workshops', Component: EventsWorkshops },
+      {
+        path: 'events-workshops/:slug',
+        element: <EventDetail backTo="/events-workshops" />,
+      },
+      { path: 'projects', Component: EventsWorkshops },
       { path: 'projects/:slug', Component: ProjectDetail },
       { path: 'portfolio', Component: Portfolio },
       { path: 'contact', Component: Contact },

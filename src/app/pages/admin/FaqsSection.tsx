@@ -200,7 +200,7 @@ export function HomeFaqDisplay() {
             Frequently Asked Questions
           </h2>
           <p style={{ color: '#6B7280', fontSize: '1.0625rem', maxWidth: '520px', margin: '0 auto' }}>
-            Helpful answers about our engineering consultancy, project support, and training services.
+            Helpful answers about our project support and training services.
           </p>
         </div>
 
