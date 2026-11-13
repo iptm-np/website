@@ -3,6 +3,7 @@ import { useContent } from '../contexts/ContentContext';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { ArrowLeft, Mail, Phone } from 'lucide-react';
+import { getContactPhoneNumbers } from '../utils/contactPhones';
 
 export function TeamMemberDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -10,7 +11,7 @@ export function TeamMemberDetail() {
   const { contactInfo, teamMembers } = useContent();
   const member = teamMembers.find((m) => m.slug === slug);
   const email = contactInfo?.email || "";
-  const phone = contactInfo?.phone || "";
+  const { primaryPhone, secondaryPhones } = getContactPhoneNumbers(contactInfo);
 
   if (!member) {
     return (
@@ -72,17 +73,32 @@ export function TeamMemberDetail() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-gray-600">
-                  <div className="bg-brand-100 p-2 rounded-full">
-                    <Phone className="h-5 w-5 text-brand-600" />
+                {(primaryPhone || secondaryPhones.length > 0) && (
+                  <div className="flex items-center gap-3 text-gray-600">
+                    <div className="bg-brand-100 p-2 rounded-full">
+                      <Phone className="h-5 w-5 text-brand-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Phone</p>
+                      {primaryPhone && (
+                        <p>
+                          <span className="font-medium">Primary: </span>
+                          <a href={`tel:${primaryPhone}`} className="text-brand-600 hover:underline">
+                            {primaryPhone}
+                          </a>
+                        </p>
+                      )}
+                      {secondaryPhones.map((phone, index) => (
+                        <p key={`${phone}-${index}`}>
+                          <span className="font-medium">Secondary: </span>
+                          <a href={`tel:${phone}`} className="text-brand-600 hover:underline">
+                            {phone}
+                          </a>
+                        </p>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <a href={`tel:${phone}`} className="text-brand-600 hover:underline">
-                      {phone}
-                    </a>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

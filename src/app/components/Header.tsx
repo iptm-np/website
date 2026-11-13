@@ -3,6 +3,7 @@ import { Mail, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useContent } from '../contexts/ContentContext';
 import { SiInstagram, SiFacebook, SiYoutube, SiTiktok, SiX } from 'react-icons/si';
+import { FaLinkedin } from "react-icons/fa";
 import logoNoBgImage from '../../imports/iptm-logo-nobg.png';
 
 export function Header() {
@@ -34,6 +35,7 @@ export function Header() {
     { label: 'YouTube', href: contactInfo?.youtube, icon: SiYoutube },
     { label: 'TikTok', href: contactInfo?.tiktok, icon: SiTiktok },
     { label: 'X', href: contactInfo?.x, icon: SiX },
+    { label: 'LinkedIn', href: contactInfo?.linkedin, icon: FaLinkedin },
   ].filter((social) => social.href?.trim());
 
   const externalUrl = (url: string) =>

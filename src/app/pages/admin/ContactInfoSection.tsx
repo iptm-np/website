@@ -7,7 +7,9 @@ import { Textarea } from "../../components/ui/textarea";
 import { useContent, ContactInfo } from "../../contexts/ContentContext";
 import { toast } from "sonner";
 import { Save, Building2, Mail, Phone, Clock } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { SiInstagram, SiFacebook, SiYoutube, SiTiktok, SiX } from "react-icons/si";
+import { getContactPhoneNumbers, splitPhoneInput } from "../../utils/contactPhones";
 
 const defaultContactInfo: ContactInfo = {
   address: "",
@@ -19,9 +21,17 @@ const defaultContactInfo: ContactInfo = {
   youtube: "",
   tiktok: "",
   x: "",
+  linkedin: ""
 };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^(?:\+977)?9[6-9]\d{8}$/;
+
+const normalizePhoneNumber = (phone: string) =>
+  phone.replace(/[\s().-]/g, "");
+
+const isValidPhoneNumber = (phone: string) =>
+  phoneRegex.test(normalizePhoneNumber(phone));
 
 export function ContactInfoSection() {
   const { contactInfo, saveContactInfo } = useContent();
@@ -32,16 +42,19 @@ export function ContactInfoSection() {
 
   useEffect(() => {
     if (contactInfo) {
+      const { primaryPhone, secondaryPhones } = getContactPhoneNumbers(contactInfo);
+
       setForm({
         address: contactInfo.address || "",
         email: contactInfo.email || "",
-        phone: contactInfo.phone || "",
+        phone: [primaryPhone, ...secondaryPhones].filter(Boolean).join(", "),
         businessHours: contactInfo.businessHours || "",
         instagram: contactInfo.instagram || "",
         facebook: contactInfo.facebook || "",
         youtube: contactInfo.youtube || "",
         tiktok: contactInfo.tiktok || "",
         x: contactInfo.x || "",
+        linkedin: contactInfo.linkedin || ""
       });
     }
     setLoading(false);
@@ -60,8 +73,18 @@ export function ContactInfoSection() {
       next.email = "Please enter a valid email address";
     }
 
+    const phoneNumbers = splitPhoneInput(form.phone);
     if (!form.phone.trim()) {
       next.phone = "Phone number is required";
+    } else if (phoneNumbers.some((phone) => !isValidPhoneNumber(phone))) {
+      next.phone = "Enter valid Nepali mobile numbers separated by commas";
+    } else {
+      const normalizedNumbers = phoneNumbers.map((phone) =>
+        normalizePhoneNumber(phone).replace(/^\+977/, "")
+      );
+      if (new Set(normalizedNumbers).size !== normalizedNumbers.length) {
+        next.phone = "Phone numbers must be unique";
+      }
     }
 
     setErrors(next);
@@ -76,18 +99,22 @@ export function ContactInfoSection() {
       return;
     }
 
+    const phoneNumbers = splitPhoneInput(form.phone);
     setSaving(true);
     try {
       await saveContactInfo({
         address: form.address.trim(),
         email: form.email.trim(),
-        phone: form.phone.trim(),
+        phone: phoneNumbers[0],
+        primaryPhone: phoneNumbers[0],
+        secondaryPhones: phoneNumbers.slice(1),
         businessHours: form.businessHours?.trim() || "",
         instagram: form.instagram?.trim(),
         facebook: form.facebook?.trim(),
         youtube: form.youtube?.trim(),
         tiktok: form.tiktok?.trim(),
         x: form.x?.trim(),
+        linkedin: form.linkedin?.trim()
       });
       toast.success("Contact information updated");
     } catch {
@@ -175,9 +202,14 @@ export function ContactInfoSection() {
                     type="tel"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    placeholder="e.g. +977-9841707077"
+                    placeholder="e.g. +977-9841234567, +977-9801234567"
                     className="mt-2"
                   />
+                  {form.phone.includes(",") && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      The first number will be treated as your primary contact number, and the remaining numbers will be saved as secondary contact numbers. Separate multiple numbers using commas (,).
+                    </p>
+                  )}
                   {errors.phone && (
                     <p className="text-sm text-red-600 mt-1">{errors.phone}</p>
                   )}
@@ -219,6 +251,7 @@ export function ContactInfoSection() {
                   { key: "youtube", label: "YouTube", icon: SiYoutube, placeholder: "https://youtube.com/@your-channel" },
                   { key: "tiktok", label: "TikTok", icon: SiTiktok, placeholder: "https://tiktok.com/@your-account" },
                   { key: "x", label: "X", icon: SiX, placeholder: "https://x.com/your-account" },
+                  { key: "linkedin", label: "LinkedIn", icon: FaLinkedin, placeholder: "https://linkedin.com/company/your-company"}
                 ].map(({ key, label, icon: Icon, placeholder }) => (
                   <div key={key}>
                     <Label htmlFor={`contact-${key}`} className="flex items-center gap-2">
