@@ -3,101 +3,45 @@
 @import './theme.css';
 
 /* ========================================
-   DCP PRELOADER
+   IPTM NEPAL PRELOADER
 ======================================== */
 
-.preloader-box {
-  width: 115px;
-  height: 115px;
-
-  background: white;
-
-  border-top: 3px solid #6e9cd5;
-  border-bottom: 3px solid #6e9cd5;
-  border-left: 3px solid #6e9cd5;
-
+/* Logo wrapper */
+.iptm-logo-wrap {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Logo: soft rise + settle, then a very gentle breathing */
+.iptm-logo {
+  position: relative;
+  opacity: 0;
+  box-shadow: 0 10px 30px rgba(58, 58, 159, 0.18);
+
+  animation:
+    iptmLogoIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    iptmBreathe 2.4s ease-in-out 0.7s infinite;
+}
+
+/* Halo: faint ring that expands and fades behind the logo */
+.iptm-logo-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  border: 2px solid #3a3a9f;
 
   opacity: 0;
-  transform: translateY(25px) scale(0.95);
-
-  animation: dcpBoxIn 0.5s ease-out forwards;
+  animation: iptmHalo 2s ease-out 0.5s infinite;
 }
-
-/* Right border for final box */
-.preloader-box-3 {
-  border-right: 3px solid #6e9cd5;
-}
-
-/* Small black separators like your original logo */
-.preloader-box + .preloader-box {
-  border-left: 8px solid #111827;
-}
-
-/* Letters */
-.preloader-box span {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 72px;
-  line-height: 1;
-  font-weight: 700;
-  color: #000;
-
-  opacity: 0;
-  transform: scale(0.7);
-
-  animation: dcpLetterIn 0.4s ease-out forwards;
-}
-
-/* Box timing */
-.preloader-box-1 {
-  animation-delay: 0.05s;
-}
-
-.preloader-box-2 {
-  animation-delay: 0.2s;
-}
-
-.preloader-box-3 {
-  animation-delay: 0.35s;
-}
-
-/* Letter timing */
-.preloader-box-1 span {
-  animation-delay: 0.25s;
-}
-
-.preloader-box-2 span {
-  animation-delay: 0.4s;
-}
-
-.preloader-box-3 span {
-  animation-delay: 0.55s;
-}
-
-
-/* Company name */
-.preloader-title {
-  color: #294f78;
-
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 24px;
-  font-weight: 700;
-
-  opacity: 0;
-  transform: translateY(15px);
-
-  animation: dcpTitleIn 0.6s ease-out 0.7s forwards;
-}
-
 
 /* Loading line */
 .preloader-line {
   width: 0%;
-  background: #6e9cd5;
+  background: #3a3a9f;
 
-  animation: dcpLoading 1.2s ease-in-out 0.1s forwards;
+  animation: iptmLoading 1.2s ease-in-out 0.1s forwards;
 }
 
 
@@ -105,10 +49,10 @@
    ANIMATIONS
 ======================================== */
 
-@keyframes dcpBoxIn {
+@keyframes iptmLogoIn {
   from {
     opacity: 0;
-    transform: translateY(25px) scale(0.95);
+    transform: translateY(8px) scale(0.96);
   }
 
   to {
@@ -117,31 +61,29 @@
   }
 }
 
-@keyframes dcpLetterIn {
-  from {
-    opacity: 0;
-    transform: scale(0.7);
-  }
-
-  to {
-    opacity: 1;
+@keyframes iptmBreathe {
+  0%, 100% {
     transform: scale(1);
   }
+
+  50% {
+    transform: scale(1.03);
+  }
 }
 
-@keyframes dcpTitleIn {
-  from {
+@keyframes iptmHalo {
+  0% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+
+  100% {
     opacity: 0;
-    transform: translateY(15px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: scale(1.3);
   }
 }
 
-@keyframes dcpLoading {
+@keyframes iptmLoading {
   from {
     width: 0%;
   }
@@ -153,24 +95,15 @@
 
 
 /* ========================================
-   MOBILE
+   REDUCED MOTION
 ======================================== */
 
-@media (max-width: 640px) {
-  .preloader-box {
-    width: 75px;
-    height: 75px;
+@media (prefers-reduced-motion: reduce) {
+  .iptm-logo {
+    animation: iptmLogoIn 0.4s ease forwards;
   }
 
-  .preloader-box span {
-    font-size: 48px;
-  }
-
-  .preloader-box + .preloader-box {
-    border-left-width: 5px;
-  }
-
-  .preloader-title {
-    font-size: 17px;
+  .iptm-logo-halo {
+    display: none;
   }
 }

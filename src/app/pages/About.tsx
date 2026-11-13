@@ -2,8 +2,7 @@ import { Card, CardContent } from '../components/ui/card';
 import { Target, Eye, Award, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router';
 import { useContent } from '../contexts/ContentContext';
-import aboutUs from "../../imports/About_us.webp";
-import aboutUsHeader from "../../imports/aboutUsHeader.webp";
+import aboutUs from "../../imports/iptm-nepal_logo.webp";
 import { PageHeroBackground } from '../components/PageHeroBackground';
 
 export function About() {
@@ -25,39 +24,39 @@ export function About() {
 
 
       <PageHeroBackground
-       image={pageHeroImages?.['about'] || ""}
+        image={pageHeroImages?.['about'] || ""}
         fallbackClassName="bg-gradient-to-r from-brand-500 to-brand-700 text-white"
       >
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-16">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl font-bold mb-4 text-white">
-                About Us
-              </h1>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-16">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl font-bold mb-4 text-white">
+              About Us
+            </h1>
 
-              <p className="text-lg md:text-2xl leading-relaxed mb-6">
-                A multidisciplinary engineering and management consulting firm
-                dedicated to excellence.
-              </p>
-            </div>
-
-            {/* Subsection Navigation */}
-            <div className="flex flex-wrap gap-4">
-              <button
-                onClick={() => scrollToSection('who-we-are')}
-                className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
-              >
-                Who We Are
-              </button>
-              <button
-                onClick={() => scrollToSection('our-team')}
-                className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
-              >
-                Our Team
-              </button>
-            </div>
+            <p className="text-lg md:text-2xl leading-relaxed mb-6">
+              A multidisciplinary engineering and management organization
+              dedicated to excellence.
+            </p>
           </div>
-        
-      
+
+          {/* Subsection Navigation */}
+          <div className="flex flex-wrap gap-4">
+            <button
+              onClick={() => scrollToSection('who-we-are')}
+              className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
+            >
+              Who We Are
+            </button>
+            <button
+              onClick={() => scrollToSection('our-team')}
+              className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
+            >
+              Our Team
+            </button>
+          </div>
+        </div>
+
+
       </PageHeroBackground>
 
 
@@ -85,25 +84,18 @@ export function About() {
 
               {/* Description */}
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                Diksha Consulting & Training Pvt. Ltd. is a leading multidisciplinary
-                engineering consulting and professional training company based in
-                Kathmandu, Nepal. We specialize in infrastructure planning, project
-                management, civil engineering consultancy, construction supervision,
-                feasibility studies, DPR preparation, and technical capacity-building
-                programs for public and private sector organizations.
+                IPTM Nepal was established in 2010 A.D. to provide professional training and capacity-building services to individuals and organizations across Nepal. We work with government and non-government organizations, private companies, development organizations, and professionals from a wide range of sectors. IPTM delivers corporate training, professional development programs, skill development initiatives, workshops, seminars, technical events, and customized training solutions designed to enhance professional competencies and strengthen organizational capabilities.
+
               </p>
 
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                From road and bridge engineering to water supply, urban development,
-                hydropower support, and engineering training, we deliver innovative,
-                sustainable, and practical solutions that contribute to Nepal’s
-                long-term development and infrastructure growth.
+                Our training programs provide individuals and organizations with practical knowledge, tools, and techniques to improve workplace performance, productivity, leadership, management, and organizational effectiveness. Our areas of expertise include leadership and management training, project management, technical and specialized training, human resource development, organizational development, and capacity building. By combining experienced professionals, industry-relevant knowledge, and practical learning approaches, IPTM Nepal helps organizations develop their workforce and achieve sustainable professional growth.
               </p>
 
               {/* Feature Points */}
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {[
-                  "Engineering Consultancy",
+                  "Infrastructure Development",
                   "Project Management",
                   "Infrastructure Development",
                   "Professional Training",
@@ -148,7 +140,7 @@ export function About() {
 
                 <img
                   src={aboutUs}
-                  alt="Diksha Consulting engineering team in Nepal"
+                  alt="IPTM Nepal team"
                   className="w-full h-full object-cover"
                 />
 
@@ -165,8 +157,8 @@ export function About() {
                   </h3>
 
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    Delivering consultancy, infrastructure solutions, and technical
-                    training with innovation, sustainability, and professional excellence.
+                    Delivering infrastructure solutions and professional training
+                    with innovation, sustainability, and excellence.
                   </p>
                 </div>
               </div>
@@ -196,7 +188,7 @@ export function About() {
                   <div className="text-sm text-gray-600 space-y-3 text-left">
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Leading consulting firm in engineering and management</p>
+                      <p>Leading organization in engineering and management</p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
@@ -316,7 +308,7 @@ export function About() {
                         <img
                           src={member.imageUrl}
                           alt={member.name}
-                          className="w-full h-64 object-cover"
+                          className="w-full h-64 object-cover object-top"
                         />
                         <CardContent className="pt-6">
                           <h3 className="font-semibold text-lg mb-1">{member.name}</h3>

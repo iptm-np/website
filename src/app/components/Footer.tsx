@@ -1,6 +1,7 @@
 import { useLocation, Link } from 'react-router';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { useContent } from '../contexts/ContentContext';
+import { getContactPhoneNumbers } from '../utils/contactPhones';
 
 export function Footer() {
   const location = useLocation();
@@ -13,30 +14,37 @@ export function Footer() {
 
   const address = contactInfo?.address || '';
   const email = contactInfo?.email || '';
-  const phone = contactInfo?.phone || '';
+  const { primaryPhone, secondaryPhones } = getContactPhoneNumbers(contactInfo);
+  const hasPhoneNumbers = Boolean(primaryPhone || secondaryPhones.length);
 
   return (
     <footer className="bg-gray-900 text-white mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">Diksha Consulting and Projects Pvt. Ltd.</h3>
+            <h3 className="text-xl font-bold mb-4">IPTM Nepal Pvt. Ltd.</h3>
             <p className="text-gray-400">
-              Leading engineering consultancy providing innovative solutions for complex projects.
-            </p>
+Leading professional training and capacity-building firm in Nepal, providing corporate training, professional development, and skill development solutions for individuals and organizations.            </p>
           </div>
 
           <div>
             <h4 className="font-semibold mb-4">Contact Us</h4>
             <div className="space-y-3">
-              {phone && (
+              {hasPhoneNumbers && (
                 <div className="flex items-center space-x-3 text-gray-400">
                   <Phone className="h-5 w-5" />
-                  <span>
-                    <a href={`tel:${phone}`} className="hover:text-white transition-colors">
-                      {phone}
-                    </a>
-                  </span>
+                  <div>
+                    {primaryPhone && (
+                      <p>
+                         <a href={`tel:${primaryPhone}`} className="hover:text-white transition-colors">{primaryPhone}</a>
+                      </p>
+                    )}
+                    {secondaryPhones.map((phone, index) => (
+                      <p key={`${phone}-${index}`}>
+                        <a href={`tel:${phone}`} className="hover:text-white transition-colors">{phone}</a>
+                      </p>
+                    ))}
+                  </div>
                 </div>
               )}
               {email && (
@@ -64,7 +72,7 @@ export function Footer() {
                   </span>
                 </div>
               )}
-              {!phone && !email && !address && (
+              {!hasPhoneNumbers && !email && !address && (
                 <p className="text-gray-500 text-sm">Contact information not yet configured.</p>
               )}
             </div>
@@ -89,18 +97,13 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/consulting" className="hover:text-white transition-colors">
-                  Consulting
-                </Link>
-              </li>
-              <li>
                 <Link to="/training" className="hover:text-white transition-colors">
                   Training
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="hover:text-white transition-colors">
-                  Projects
+                <Link to="/events-workshops" className="hover:text-white transition-colors">
+                  Events & Workshops
                 </Link>
               </li>
               <li>
@@ -118,7 +121,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Diksha Consulting and Projects Pvt. Ltd. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} IPTM Nepal Pvt. Ltd. All rights reserved.</p>
         </div>
       </div>
     </footer>

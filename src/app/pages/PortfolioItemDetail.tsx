@@ -9,43 +9,41 @@ import {
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useContent } from "../contexts/ContentContext";
-import { PortfolioItem, PortfolioType } from "../../types/portfolio.types";
-import { formatContractAmount } from "../../services/portfolio.service";
+import { PublicPortfolioItem, PublicPortfolioType } from "../../types/portfolio.types";
+import { formatContractAmount, getPublicPortfolioItems } from "../../services/portfolio.service";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
 
-const typeLabels: Record<PortfolioType, string> = {
-  project: "Project",
-  consulting: "Consulting Assignment",
+const typeLabels: Record<PublicPortfolioType, string> = {
+  project: "Events & Workshops",
   training: "Training Program",
 };
 
-const backLinks: Record<PortfolioType, string> = {
+const backLinks: Record<PublicPortfolioType, string> = {
   project: "/portfolio",
-  consulting: "/portfolio",
   training: "/portfolio",
 };
 
 interface PortfolioItemDetailProps {
-  expectedType?: PortfolioType;
+  expectedType: PublicPortfolioType;
+  backTo?: string;
 }
 
-function getSpecificLabel(item: PortfolioItem) {
+function getSpecificLabel(item: PublicPortfolioItem) {
   if (item.type === "project") return item.projectType || "Engineering Project";
-  if (item.type === "consulting")
-    return item.serviceType || "Consulting Service";
   return item.trainingType || "Training & Capacity Building";
 }
 
 export function PortfolioItemDetail({
   expectedType,
+  backTo,
 }: PortfolioItemDetailProps) {
   const { slug } = useParams();
   const { portfolio, clients } = useContent();
 
-  const item = portfolio.find(
+  const item = getPublicPortfolioItems(portfolio).find(
     (portfolioItem) =>
       portfolioItem.slug === slug &&
-      (!expectedType || portfolioItem.type === expectedType),
+      portfolioItem.type === expectedType,
   );
 
   if (!item) {
@@ -58,10 +56,10 @@ export function PortfolioItemDetail({
           <p className="mt-3 text-slate-600">
             The assignment you are looking for does not exist in the portfolio.
           </p>
-          <Link to="/portfolio">
+          <Link to={backTo || "/portfolio"}>
             <Button className="mt-8">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Portfolio
+              Back to {backTo === "/events-workshops" ? "Events & Workshops" : "Portfolio"}
             </Button>
           </Link>
         </div>
@@ -86,7 +84,7 @@ export function PortfolioItemDetail({
         )}
  
         <div className="relative mx-auto flex max-w-7xl flex-col justify-end px-4 py-12 sm:px-6 lg:px-8">
-          <Link to={backLinks[item.type]}>
+          <Link to={backTo || backLinks[item.type]}>
             <Button variant="secondary" size="sm" className="mb-8 w-fit">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Portfolio
@@ -147,11 +145,33 @@ export function PortfolioItemDetail({
           <div className="rounded-lg border border-slate-200 bg-white p-5">
             <MapPin className="mb-3 h-5 w-5 text-cyan-700" />
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Location
+              {item.type === "training"
+                ? item.mode === "online"
+                  ? "Training Mode"
+                  : "Venue"
+                : "Location"}
             </p>
-            <p className="mt-1 font-semibold text-slate-950">
-              {item.location || "-"}
-            </p>
+            {item.type === "training" ? (
+              <>
+                <p className="mt-1 font-semibold capitalize text-slate-950">
+                  {item.mode || "physical"}
+                  {item.mode === "online" && item.platform
+                    ? ` · ${item.platform}`
+                    : ""}
+                </p>
+                {item.mode !== "online" && (
+                  <p className="mt-1 text-sm text-slate-600">
+                    {[item.venue, item.address || item.location]
+                      .filter(Boolean)
+                      .join(", ") || "-"}
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className="mt-1 font-semibold text-slate-950">
+                {item.location || "-"}
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -171,7 +191,7 @@ export function PortfolioItemDetail({
 
         <aside className="h-fit rounded-lg border border-slate-200 bg-slate-50 p-6">
           <h3 className="text-lg font-bold text-slate-950">
-            Project Information
+            {item.type === "training" ? "Training Information" : "Project Information"}
           </h3>
           <dl className="mt-5 space-y-4 text-sm">
             <div>
@@ -200,12 +220,57 @@ export function PortfolioItemDetail({
               </dd>
             </div>
             {item.type === "training" && (
-              <div>
-                <dt className="text-slate-500">Mode</dt>
-                <dd className="mt-1 font-semibold capitalize text-slate-900">
-                  {item.mode || "-"}
-                </dd>
-              </div>
+              <>
+                <div>
+                  <dt className="text-slate-500">Training Mode</dt>
+                  <dd className="mt-1 font-semibold capitalize text-slate-900">
+                    {item.mode || "physical"}
+                  </dd>
+                </div>
+                {item.mode === "online" && item.platform && (
+                  <div>
+                    <dt className="text-slate-500">Platform</dt>
+                    <dd className="mt-1 font-semibold text-slate-900">
+                      {item.platform}
+                    </dd>
+                  </div>
+                )}
+                {item.mode !== "online" && (
+                  <>
+                    {item.venue && (
+                      <div>
+                        <dt className="text-slate-500">Venue</dt>
+                        <dd className="mt-1 font-semibold text-slate-900">
+                          {item.venue}
+                        </dd>
+                      </div>
+                    )}
+                    {(item.address || item.location) && (
+                      <div>
+                        <dt className="text-slate-500">Address/Location</dt>
+                        <dd className="mt-1 font-semibold text-slate-900">
+                          {item.address || item.location}
+                        </dd>
+                      </div>
+                    )}
+                  </>
+                )}
+                {item.registerLink && (
+                  <div>
+                    <dt className="text-slate-500">Registration</dt>
+                    <dd className="mt-1">
+                      <a
+                        href={item.registerLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center rounded-md bg-brand-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-brand-700"
+                      >
+                        Register
+                      </a>
+                    </dd>
+                  </div>
+                )}
+              </>
             )}
           </dl>
         </aside>

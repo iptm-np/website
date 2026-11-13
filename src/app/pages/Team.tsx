@@ -75,7 +75,7 @@ export function Team() {
                         <img
                           src={member.imageUrl}
                           alt={member.name}
-                          className="w-full h-64 object-cover"
+                          className="w-full h-64 object-cover object-top"
                         />
                         <CardContent className="pt-6">
                           <h3 className="font-semibold text-lg mb-1">{member.name}</h3>

@@ -13,6 +13,7 @@ import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 import { toast } from "sonner";
 import { useContent } from "../contexts/ContentContext";
 import { PageHeroBackground } from "../components/PageHeroBackground";
+import { getContactPhoneNumbers } from "../utils/contactPhones";
 
 export function Contact() {
   const { contactInfo, pageHeroImages } = useContent();
@@ -20,7 +21,8 @@ export function Contact() {
 
   const address = contactInfo?.address || "";
   const email = contactInfo?.email || "";
-  const phone = contactInfo?.phone || "";
+  const { primaryPhone, secondaryPhones } = getContactPhoneNumbers(contactInfo);
+  const hasPhoneNumbers = Boolean(primaryPhone || secondaryPhones.length);
   const businessHours = contactInfo?.businessHours || "";
 
   const [formData, setFormData] = useState({
@@ -168,7 +170,7 @@ export function Contact() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
             <p className="text-xl text-brand-50 max-w-3xl">
-              Get in touch with us for any inquiries or project consultations
+              Get in touch with us for any inquiries or project information
             </p>
           </div>
 
@@ -234,7 +236,7 @@ export function Contact() {
                   </Card>
                 )}
 
-                {phone && (
+                {hasPhoneNumbers && (
                   <Card>
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-4">
@@ -243,14 +245,22 @@ export function Contact() {
                         </div>
                         <div>
                           <h3 className="font-semibold mb-1">Phone</h3>
-                          <p className="text-gray-600">
-                            <a
-                              href={`tel:${phone}`}
-                              className="text-brand-600 hover:underline"
-                            >
-                              {phone}
-                            </a>
-                          </p>
+                          {primaryPhone && (
+                            <p className="text-gray-600">
+                           
+                              <a href={`tel:${primaryPhone}`} className="text-brand-600 hover:underline">
+                                {primaryPhone}
+                              </a>
+                            </p>
+                          )}
+                          {secondaryPhones.map((phone, index) => (
+                            <p key={`${phone}-${index}`} className="text-gray-600">
+                              
+                              <a href={`tel:${phone}`} className="text-brand-600 hover:underline">
+                                {phone}
+                              </a>
+                            </p>
+                          ))}
                         </div>
                       </div>
                     </CardContent>
@@ -273,7 +283,7 @@ export function Contact() {
                   </Card>
                 )}
 
-                {!address && !email && !phone && !businessHours && (
+                {!address && !email && !hasPhoneNumbers && !businessHours && (
                   <Card>
                     <CardContent className="pt-6 text-center text-gray-500">
                       <p>Contact information not yet configured.</p>
@@ -374,7 +384,7 @@ export function Contact() {
 
                       <Input
                         name="subject"
-                        placeholder="e.g. Project consultation, quotation, etc."
+                        placeholder="e.g. Project inquiry, quotation, etc."
                         value={formData.subject}
                         onChange={handleChange}
                         className="mt-2 h-12 rounded-xl bg-gray-50 border-gray-200 focus:bg-white focus:border-brand-500 focus:ring-brand-500 transition"

@@ -22,7 +22,7 @@ interface PortfolioTableProps {
   items: PortfolioItem[];
   title?: string;
   showTypeFilter?: boolean;
-  allowedTypes?: ('project' | 'consulting' | 'training')[];
+  allowedTypes?: ('project' | 'training')[];
 }
 
 export function PortfolioTable({
@@ -79,9 +79,7 @@ export function PortfolioTable({
   const getItemLink = (item: PortfolioItem) => {
     switch (item.type) {
       case 'project':
-        return `/projects/${item.slug}`;
-      case 'consulting':
-        return `/consulting/${item.slug}`;
+        return `/events-workshops/${item.slug}`;
       case 'training':
         return `/events/${item.slug}`;
       default:
@@ -100,7 +98,7 @@ export function PortfolioTable({
 
   const getTypeLabel = (type: string) => {
     const labels = {
-      project: 'Project',
+      project: 'Events & Workshops',
       consulting: 'Consulting',
       training: 'Training/Event',
     };
@@ -140,8 +138,7 @@ export function PortfolioTable({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="project">Projects</SelectItem>
-                    <SelectItem value="consulting">Consulting</SelectItem>
+                    <SelectItem value="project">Events & Workshops</SelectItem>
                     <SelectItem value="training">Training/Events</SelectItem>
                   </SelectContent>
                 </Select>

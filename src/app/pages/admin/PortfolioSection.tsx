@@ -28,12 +28,12 @@ import { toast } from "sonner";
 import { Edit, Search, Trash2, Plus } from "lucide-react";
 import { PortfolioItem, PortfolioType } from "../../../types/portfolio.types";
 
-type TypeFilter = PortfolioType | "all";
+type TypeFilter = Exclude<PortfolioType, "consulting"> | "all";
 type FeaturedFilter = "all" | "featured" | "not-featured";
 
 const formatType = (type: PortfolioType) => {
   const labels: Record<PortfolioType, string> = {
-    project: "Project",
+    project: "Events & Workshops",
     consulting: "Consulting",
     training: "Training",
   };
@@ -137,8 +137,7 @@ export function PortfolioSection() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="project">Projects</SelectItem>
-                <SelectItem value="consulting">Consulting Services</SelectItem>
+                <SelectItem value="project">Events & Workshops</SelectItem>
                 <SelectItem value="training">Training</SelectItem>
               </SelectContent>
             </Select>

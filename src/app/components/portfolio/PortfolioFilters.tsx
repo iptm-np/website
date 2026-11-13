@@ -12,7 +12,7 @@ import {
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-export type PortfolioFilterType = "all" | "project" | "consulting" | "training";
+export type PortfolioFilterType = "all" | "project" | "training";
 
 export interface PortfolioFiltersState {
   search?: string;
@@ -102,7 +102,6 @@ export function PortfolioFilters({
               <SelectContent>
                 <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="project">Project</SelectItem>
-                <SelectItem value="consulting">Consulting</SelectItem>
                 <SelectItem value="training">Training</SelectItem>
               </SelectContent>
             </Select>

@@ -9,29 +9,71 @@ import {
   type CarouselApi,
 } from "../components/ui/carousel";
 import { HomeFaqDisplay } from "./admin/FaqsSection";
-import { CheckCircle, Users, Award, Lightbulb, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  CheckCircle,
+  Users,
+  Award,
+  Lightbulb,
+  ChevronLeft,
+  ChevronRight,
+  CalendarDays,
+  MapPin,
+} from "lucide-react";
 import { useContent } from "../contexts/ContentContext";
-import { PortfolioItem, PortfolioType } from "../../types/portfolio.types";
+import { PublicPortfolioItem, PublicPortfolioType } from "../../types/portfolio.types";
+import { getPublicPortfolioItems } from "../../services/portfolio.service";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
-const engineering = new URL("../../imports/engineering.webp", import.meta.url)
+import { format, isValid, parseISO } from "date-fns";
+const engineering = new URL("../../imports/og-image.webp", import.meta.url)
   .href;
 import { Helmet } from "react-helmet-async";
 import { slugify } from "../../utils/slug";
 
-const portfolioTypeLabels: Record<PortfolioType, string> = {
-  project: "Project",
-  consulting: "Consulting",
+const portfolioTypeLabels: Record<PublicPortfolioType, string> = {
+  project: "Events & Workshops",
   training: "Training",
 };
 const FEATURED_WORK_SCROLL_DURATION = 80_000;
+
+const getLocalDateKey = (date: Date) => format(date, "yyyy-MM-dd");
+
+const formatTrainingDate = (date: string) => {
+  const parsedDate = parseISO(date);
+  return isValid(parsedDate) ? format(parsedDate, "MMM d, yyyy") : date;
+};
+
+const hasCurrentOrFutureEndDate = (
+  endDate: string | undefined,
+  today: string,
+) => {
+  if (!endDate) return false;
+  const parsedDate = parseISO(endDate);
+  return isValid(parsedDate) && format(parsedDate, "yyyy-MM-dd") >= today;
+};
 
 export function Home() {
   const { clients, portfolio, heroImages } = useContent();
   const [heroApi, setHeroApi] = useState<CarouselApi | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [featuredWorkPaused, setFeaturedWorkPaused] = useState(false);
+  const [today, setToday] = useState(() => getLocalDateKey(new Date()));
   const featuredMarqueeRef = useRef<HTMLDivElement | null>(null);
   const featuredTrackRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const now = new Date();
+    const nextMidnight = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1,
+    );
+    const timeout = window.setTimeout(
+      () => setToday(getLocalDateKey(new Date())),
+      nextMidnight.getTime() - now.getTime(),
+    );
+
+    return () => window.clearTimeout(timeout);
+  }, [today]);
 
   // Auto-play carousel
   useEffect(() => {
@@ -60,7 +102,18 @@ export function Home() {
     };
   }, [heroApi]);
 
-  const featuredPortfolioItems = portfolio.filter((item) => item.displayOnHome);
+  const upcomingTrainingItems = portfolio
+    .filter(
+      (item) =>
+        item.type === "training" &&
+        item.displayOnHome &&
+        hasCurrentOrFutureEndDate(item.endDate, today),
+    )
+    .sort((a, b) => (a.startDate || "").localeCompare(b.startDate || ""))
+    .slice(0, 3);
+  const featuredPortfolioItems = getPublicPortfolioItems(portfolio).filter(
+    (item) => item.type === "project" && item.displayOnHome,
+  );
   const featuredItemsPerLoop =
     featuredPortfolioItems.length > 0
       ? Math.max(1, Math.ceil(4 / featuredPortfolioItems.length))
@@ -96,9 +149,8 @@ export function Home() {
       FEATURED_WORK_SCROLL_DURATION;
   };
 
-  const getPortfolioLink = (item: PortfolioItem) => {
-    if (item.type === "project") return `/projects/${item.slug}`;
-    if (item.type === "consulting") return `/consulting/${item.slug}`;
+  const getPortfolioLink = (item: PublicPortfolioItem) => {
+    if (item.type === "project") return `/events-workshops/${item.slug}`;
     return `/training/${item.slug}`;
   };
 
@@ -115,51 +167,51 @@ export function Home() {
       <Helmet>
         {/* Basic meta tags — highest SEO priority */}
         <title>
-          Diksha Consulting and Projects | Engineering Consultancy Nepal
+          IPTM Nepal | Capacity Building Company in Nepal | Training Solutions
         </title>
         <meta
           name="description"
-          content="Diksha Consulting and Projects Pvt. Ltd. is a Nepal-based engineering consultancy specializing in infrastructure development, project management, water supply engineering, structural design, and technical training solutions."
+          content="IPTM Nepal is a Nepal-based capacity building organization specializing in infrastructure development, project management, water supply engineering, structural design, and technical training solutions."
         />
         <meta name="robots" content="index, follow" />
         <meta
           name="keywords"
-          content="engineering consultancy Nepal, infrastructure development Nepal, project management Nepal, structural engineering Nepal, water supply engineering Nepal, DPR consultant Nepal"
+          content="capacity building Nepal, infrastructure development Nepal, project management Nepal, structural engineering Nepal, water supply engineering Nepal, DPR preparation Nepal"
         />
-        <link rel="canonical" href="https://www.dikshacp.com.np" />
+        <link rel="canonical" href="https://www.iptmnepal.com" />
 
         {/* Open Graph — for social sharing previews */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.dikshacp.com.np" />
+        <meta property="og:url" content="https://www.iptmnepal.com" />
         <meta
           property="og:title"
-          content="Diksha Consulting and Projects | Engineering Consultancy Nepal"
+          content="IPTM Nepal | Capacity Building Company in Nepal | Training Solutions"
         />
         <meta
           property="og:description"
-          content="Expert engineering consultancy, project management, and training solutions across Nepal."
+          content="Expert capacity building and training solutions across Nepal."
         />
         <meta
           property="og:image"
-          content="https://www.dikshacp.com.np/og-image.webp"
+          content="https://www.iptmnepal.com/og-image.webp"
         />
 
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "EngineeringCompany",
-            name: "Diksha Consulting and Projects Pvt. Ltd.",
-            url: "https://www.dikshacp.com.np",
-            logo: "https://www.dikshacp.com.np/DCP_logo-1.webp",
-            image: "https://www.dikshacp.com.np/og-image.webp",
+            "@type": "CapacityBuildingOrganization",
+            name: "IPTM Nepal",
+            url: "https://www.iptmnepal.com",
+            logo: "https://www.iptmnepal.com/iptm-nepal_logo.webp",
+            image: "https://www.iptmnepal.com/og-image.webp",
             description:
-              "Engineering consultancy and infrastructure development company in Nepal.",
-            telephone: "+977-9841707077",
-            email: "consultingdiksha@gmail.com",
+              "Capacity building and training solutions provider in Nepal.",
+            telephone: "+977-9841531682",
+            email: "iptmnepal@gmail.com",
             address: {
               "@type": "PostalAddress",
-              streetAddress: "Ghattekulo-32",
+              streetAddress: "Tripureshwor",
               addressLocality: "Kathmandu",
               addressRegion: "Bagmati Province",
               postalCode: "44600",
@@ -246,7 +298,7 @@ export function Home() {
             <div className="absolute inset-0">
               <img
                 src={engineering}
-                alt="Engineering Consultancy"
+                alt="Infrastructure Development"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black/40"></div>
@@ -257,42 +309,14 @@ export function Home() {
           <div className="relative z-[2] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="max-w-3xl">
               <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Engineering Consultancy & Project Experts in Nepal
+                Professional Training & Capacity Building in Nepal
               </h1>
 
               <p className="text-lg md:text-xl mb-6 text-gray-100">
-                Diksha Consulting and Projects Pvt. Ltd. delivers expert
-                engineering consultancy, project support, and industry-driven
-                training solutions.
-              </p>
-
-              <p className="text-lg md:text-xl mb-8 text-gray-200">
-                We help organizations and professionals achieve real-world
-                results through practical expertise, efficient execution, and
-                high-impact outcomes.
+               IPTM Nepal is a professional training and consulting institute providing expert-led training, institutional capacity building, research, and consulting services for professionals and organizations across Nepal.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/about">
-                  <Button
-                    size="lg"
-                    className="
-        w-full sm:w-auto
-        px-6 py-2
-        rounded-full
-        bg-white/10
-        hover:bg-white/20
-        text-white
-        border border-white/30
-        transition-all duration-300
-        backdrop-blur-sm
-        cursor-pointer
-      "
-                  >
-                    Learn More
-                  </Button>
-                </Link>
-
                 <Link to="/portfolio">
                   <Button
                     size="lg"
@@ -309,13 +333,126 @@ export function Home() {
         cursor-pointer
       "
                   >
-                    View Portfolio
+                    Explore Our Portfolio
+                  </Button>
+                </Link>
+                 <Link to="/contact">
+                  <Button
+                    size="lg"
+                    className="
+        w-full sm:w-auto
+        px-6 py-2
+        rounded-full
+        bg-white/10
+        hover:bg-white/20
+        text-white
+        border border-white/30
+        transition-all duration-300
+        backdrop-blur-sm
+        cursor-pointer
+      "
+                  >
+                    Contact Us
                   </Button>
                 </Link>
               </div>
             </div>
           </div>
         </section>
+        
+{upcomingTrainingItems.length > 0 && (
+          <section className="bg-gray-50 py-16">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mb-10 text-center">
+                <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-brand-600">
+                  Learn with IPTM Nepal
+                </p>
+                <h2 className="mb-3 text-3xl font-bold text-gray-900">
+                  Upcoming Training
+                </h2>
+                <p className="mx-auto max-w-2xl text-gray-600">
+                  Build practical skills and strengthen your professional
+                  expertise with our upcoming programs.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {upcomingTrainingItems.map((training) => (
+                  <Card
+                    key={training.id}
+                    className="h-full overflow-hidden border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-lg"
+                  >
+                    <img
+                      src={training.featuredImage || engineering}
+                      alt={training.title}
+                      className="h-52 w-full object-cover"
+                    />
+                    <CardContent className="flex h-full flex-col p-6">
+                      <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                        {training.title}
+                      </h3>
+
+                      <div className="mb-4 space-y-2 text-sm text-gray-600">
+                        <p className="flex items-start gap-2">
+                          <CalendarDays className="mt-0.5 size-4 shrink-0 text-brand-600" />
+                          <span>
+                            {training.startDate
+                              ? formatTrainingDate(training.startDate)
+                              : "Date to be announced"}
+                            {" – "}
+                            {training.endDate
+                              ? formatTrainingDate(training.endDate)
+                              : "Date to be announced"}
+                          </span>
+                        </p>
+                        <p className="flex items-start gap-2">
+                          <MapPin className="mt-0.5 size-4 shrink-0 text-brand-600" />
+                          <span>
+                            {training.mode === "online"
+                              ? `Online${training.platform ? ` · ${training.platform}` : ""}`
+                              : [training.venue, training.address || training.location]
+                                  .filter(Boolean)
+                                  .join(", ") || "Location to be announced"}
+                          </span>
+                        </p>
+                      </div>
+
+                      <SanitizedHtml
+                        html={training.shortDescription}
+                        className="mb-6 line-clamp-3 text-sm text-gray-600 [&_p]:mb-1 [&_a]:text-brand-600 [&_a]:underline [&_strong]:font-semibold [&_em]:italic"
+                      />
+
+                      <Link
+                        to={`/training/${training.slug}`}
+                        className="mt-auto"
+                      >
+                        <Button className="w-full bg-brand-600 text-white hover:bg-brand-700">
+                          View Details
+                        </Button>
+                      </Link>
+                      {training.registerLink && (
+                        <a
+                          href={training.registerLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex w-full items-center justify-center rounded-md border border-brand-600 px-4 py-2 font-semibold text-brand-600 transition-colors hover:bg-brand-50"
+                        >
+                          Register
+                        </a>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="mt-8 text-center">
+                <Link to="/training">
+                  <Button variant="outline">View All Training</Button>
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Services Section */}
         <section className="py-16 bg-gray-50">
@@ -412,7 +549,7 @@ export function Home() {
               <div className="text-center sm:text-left">
                 <h2 className="text-3xl font-bold mb-4">Featured Work</h2>
                 <p className="text-gray-600">
-                  Explore our featured projects, consulting services, and training.
+                  Explore our training, events, and workshops.
                 </p>
               </div>
               <div

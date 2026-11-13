@@ -153,7 +153,7 @@ export function FaqForm() {
                 <Input
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
-                  placeholder="What services does Diksha Consulting and Projects provide?"
+                  placeholder="What services does IPTM Nepal provide?"
                   required
                 />
               </div>

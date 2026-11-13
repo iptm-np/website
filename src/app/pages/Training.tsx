@@ -22,7 +22,15 @@ import { SanitizedHtml } from "../components/ui/sanitized-html";
 import { PortfolioFilters as PortfolioFiltersComponent } from "../components/portfolio/PortfolioFilters";
 import { PortfolioFiltersState } from "../../types/portfolio.types";
 
-export function Training() {
+interface TrainingProps {
+  pageVariant?: "training" | "events-workshops";
+}
+
+export function Training({ pageVariant = "training" }: TrainingProps) {
+  const isEventsWorkshopsPage = pageVariant === "events-workshops";
+  const eventDetailsPath = isEventsWorkshopsPage
+    ? "/events-workshops"
+    : "/training";
   const { events, portfolio, clients, pageHeroImages } = useContent();
   const [view, setView] = useState<"grid" | "table">("grid");
   const [fySortOrder, setFySortOrder] = useState<"desc" | "asc">("desc");
@@ -47,31 +55,52 @@ export function Training() {
       topics: event.topics,
       imageUrl: "",
       location: "",
+      mode: undefined as "online" | "physical" | undefined,
+      platform: undefined as string | undefined,
+      venue: undefined as string | undefined,
+      address: undefined as string | undefined,
+      registerLink: undefined as string | undefined,
       sector: undefined as string | undefined,
       fiscalYear: undefined as string | undefined,
       clientId: undefined as string | undefined,
     })),
     ...portfolio
-      .filter((item) => item.type === "training")
+      .filter((item) =>
+        item.type === (isEventsWorkshopsPage ? "project" : "training"),
+      )
       .map((item) => ({
         id: `portfolio-${item.id}`,
         title: item.title,
         description: item.shortDescription,
         slug: item.slug,
-        type: item.trainingType || "Training",
+        type:
+          item.type === "project"
+            ? item.projectType || "Event / Workshop"
+            : item.trainingType || "Training",
         startDate: item.startDate || item.fiscalYear || "",
         endDate: item.endDate || "",
-        duration: item.mode ? `${item.mode} mode` : "Program",
+        duration: "Program",
         topics: [
           item.sector,
           clients.find((c) => c.id === item.clientId)?.name,
-          item.location,
+          item.venue,
+          item.address || item.location,
         ].filter(Boolean) as string[],
         imageUrl: item.featuredImage,
-        location:
-          item.location ||
-          clients.find((c) => c.id === item.clientId)?.name ||
-          "",
+        mode: item.mode === "online" ? "online" as const : "physical" as const,
+        platform: item.platform,
+        venue: item.venue,
+        address: item.address || item.location,
+        registerLink: item.registerLink,
+        location: item.mode === "online"
+          ? item.platform
+            ? `Online · ${item.platform}`
+            : "Online"
+          : [item.venue, item.address || item.location]
+              .filter(Boolean)
+              .join(", ") ||
+            clients.find((c) => c.id === item.clientId)?.name ||
+            "",
         sector: item.sector,
         fiscalYear: item.fiscalYear,
         clientId: item.clientId,
@@ -136,20 +165,29 @@ export function Training() {
     <div>
       {/* Hero */}
       <PageHeroBackground
-        image={pageHeroImages?.training}
+        image={
+          isEventsWorkshopsPage
+            ? pageHeroImages?.projects
+            : pageHeroImages?.training
+        }
         fallbackClassName="bg-gradient-to-r from-brand-500 to-brand-700 text-white py-16"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl font-bold mb-4">Training</h1>
+            <h1 className="text-4xl font-bold mb-4">
+              {isEventsWorkshopsPage ? "Events & Workshops" : "Training"}
+            </h1>
             <p className="text-xl text-brand-50 max-w-3xl">
-              Professional development programs, workshops, and training sessions
-              organized by DCP
+              {isEventsWorkshopsPage
+                ? "Discover events, workshops, seminars, and learning programs organized by IPTM Nepal."
+                : "Professional development programs, workshops, and training sessions organized by IPTM Nepal to enhance skills and knowledge in various sectors."}
             </p>
             <div className="mt-8">
               <p className="text-3xl font-bold">{trainingItems.length}+</p>
               <p className="mt-1 text-sm text-brand-100">
-                Training Programs Conducted
+                {isEventsWorkshopsPage
+                  ? "Events & Workshops"
+                  : "Training Programs Conducted"}
               </p>
             </div>
           </div>
@@ -162,12 +200,14 @@ export function Training() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">
-              Training & Capacity Building Programs
+              {isEventsWorkshopsPage
+                ? "Events & Workshops"
+                : "Training & Capacity Building Programs"}
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Explore the training programs, workshops, and professional
-              development courses organized and delivered by DCP across various
-              sectors
+              {isEventsWorkshopsPage
+                ? "Explore the events, workshops, seminars, and learning programs organized by IPTM Nepal."
+                : "Explore the training programs, workshops, and professional development courses organized and delivered by IPTM Nepal across various sectors"}
             </p>
           </div>
 
@@ -181,7 +221,9 @@ export function Training() {
               filteredCount: trainingItems.length,
               page: 1,
               totalPages: 1,
-              itemLabel: "programs",
+              itemLabel: isEventsWorkshopsPage
+                ? "events and workshops"
+                : "programs",
             }}
             hasActiveFilters={hasActiveFilters}
             isEmpty={isEmpty}
@@ -215,7 +257,9 @@ export function Training() {
               {hasActiveFilters ? (
                 <>
                   <p className="text-gray-500">
-                    No training programs match the selected filters.
+                    {isEventsWorkshopsPage
+                      ? "No events or workshops match the selected filters."
+                      : "No training programs match the selected filters."}
                   </p>
                   <Button
                     variant="outline"
@@ -227,15 +271,21 @@ export function Training() {
                 </>
               ) : (
                 <p className="text-gray-500">
-                  No training programs available at the moment. Check back soon!
+                  {isEventsWorkshopsPage
+                    ? "No events or workshops are available at the moment. Check back soon!"
+                    : "No training programs available at the moment. Check back soon!"}
                 </p>
               )}
             </div>
           ) : view === "grid" ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
               {filteredItems.map((event) => (
-                <Link key={event.id} to={`/training/${event.slug}`}>
-                  <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer h-full group">
+                <div key={event.id} className="h-full">
+                  <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full group">
+                    <Link
+                      to={`${eventDetailsPath}/${event.slug}`}
+                      className="flex flex-1 flex-col cursor-pointer"
+                    >
                     <div className="relative overflow-hidden">
                       {event.imageUrl ? (
                         <img
@@ -254,10 +304,15 @@ export function Training() {
                       </div>
                     </div>
                     <CardContent className="pt-6">
-                      <div className="mb-3">
+                      <div className="mb-3 flex flex-wrap gap-2">
                         <span className="px-3 py-1 bg-brand-100 text-brand-600 text-xs rounded-full font-medium capitalize">
-                          {event.duration}
+                          {event.mode ? `${event.mode} training` : event.duration}
                         </span>
+                        {event.platform && (
+                          <span className="px-3 py-1 bg-slate-100 text-slate-700 text-xs rounded-full font-medium">
+                            {event.platform}
+                          </span>
+                        )}
                       </div>
                       <h3 className="font-semibold text-xl mb-2 group-hover:text-brand-600 transition-colors">
                         {event.title}
@@ -292,12 +347,31 @@ export function Training() {
                         </ul>
                       )}
                       <div className="flex items-center text-brand-600 text-sm font-medium group-hover:gap-2 transition-all">
-                        <span>View Training</span>
+                        <span>
+                          {isEventsWorkshopsPage ? "View Event" : "View Training"}
+                        </span>
                         <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </CardContent>
+                  </Link>
+                  {event.registerLink && (
+                    <CardContent className="pt-0">
+                      <Button
+                        asChild
+                        className="w-full bg-brand-600 text-white hover:bg-brand-700"
+                      >
+                        <a
+                          href={event.registerLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Register
+                        </a>
+                      </Button>
+                    </CardContent>
+                  )}
                   </Card>
-                </Link>
+                </div>
               ))}
             </div>
           ) : (
@@ -309,7 +383,9 @@ export function Training() {
                       S.N
                     </th>
                     <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
-                      Training Title
+                      {isEventsWorkshopsPage
+                        ? "Event / Workshop"
+                        : "Training Title"}
                     </th>
                     <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                       Sector
@@ -356,7 +432,7 @@ export function Training() {
                       </td>
                       <td className="px-5 py-4">
                         <Link
-                          to={`/training/${event.slug}`}
+                          to={`${eventDetailsPath}/${event.slug}`}
                           className="flex items-center gap-1 text-sm font-medium text-brand-600 hover:gap-2 transition-all"
                         >
                           View <ArrowRight className="h-3.5 w-3.5" />
@@ -375,10 +451,15 @@ export function Training() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Train With Us</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              {isEventsWorkshopsPage
+                ? "Why Join Our Events & Workshops"
+                : "Why Train With Us"}
+            </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Our training programs are designed by industry experts to provide
-              practical, real-world knowledge
+              {isEventsWorkshopsPage
+                ? "Our events and workshops bring professionals together to share practical knowledge and ideas."
+                : "Our training programs are designed by industry experts to provide practical, real-world knowledge"}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -449,11 +530,14 @@ export function Training() {
       <section className="py-16 bg-brand-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
-            Ready to Advance Your Career?
+            {isEventsWorkshopsPage
+              ? "Join an Upcoming Event"
+              : "Ready to Advance Your Career?"}
           </h2>
           <p className="text-xl mb-8 text-brand-50 max-w-2xl mx-auto">
-            Join our training programs and gain the skills you need to excel in
-            the engineering industry.
+            {isEventsWorkshopsPage
+              ? "Join our events and workshops to build knowledge, exchange ideas, and connect with professionals."
+              : "Join our training programs and gain the skills you need to excel in the engineering industry."}
           </p>
           <Link to="/contact">
             <Button size="lg" variant="secondary">

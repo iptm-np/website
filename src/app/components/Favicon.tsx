@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import faviconImage from '../../imports/DCP_logo-1.webp';
+import faviconImage from '../../imports/iptm-nepal_logo.webp';
 
 export function Favicon() {
   useEffect(() => {

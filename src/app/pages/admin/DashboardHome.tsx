@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { useContent } from '../../contexts/ContentContext';
 import {
-  Briefcase,
   Building2,
   GraduationCap,
   Users,
@@ -29,10 +28,6 @@ export function DashboardHome() {
   const navigate = useNavigate();
   const { teamMembers, clients, portfolio, sectors, heroImages } = useContent();
 
-  const consultingCount = portfolio.filter(
-    (item) => item.type === 'consulting'
-  ).length;
-
   const projectCount = portfolio.filter(
     (item) => item.type === 'project'
   ).length;
@@ -51,12 +46,6 @@ export function DashboardHome() {
       label: 'Projects',
       value: projectCount,
       icon: Building2,
-      section: 'portfolio',
-    },
-    {
-      label: 'Consultings',
-      value: consultingCount,
-      icon: Briefcase,
       section: 'portfolio',
     },
     {

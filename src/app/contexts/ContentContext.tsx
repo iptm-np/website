@@ -106,7 +106,6 @@ export interface PageHeroImages {
   about?: string;
   companyProfile?: string;
   portfolio?: string;
-  consulting?: string;
   training?: string;
   projects?: string;
   contact?: string;
@@ -135,12 +134,15 @@ export interface ContactInfo {
   address: string;
   email: string;
   phone: string;
+  primaryPhone?: string;
+  secondaryPhones?: string[];
   businessHours?: string;
   instagram?: string;
   facebook?: string;
   youtube?: string;
   tiktok?: string;
   x?: string;
+  linkedin?: string;
 }
 
 interface ContentContextType {

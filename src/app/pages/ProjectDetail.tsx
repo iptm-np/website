@@ -51,10 +51,10 @@ export function ProjectDetail() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-12">
-            <Link to="/projects">
+            <Link to="/portfolio">
               <Button variant="secondary" size="sm" className="mb-6 w-fit">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Projects
+                Back to Portfolio
               </Button>
             </Link>
             <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -402,13 +402,13 @@ export function ProjectDetail() {
                 Get in Touch
               </Button>
             </Link>
-            <Link to="/projects">
+            <Link to="/portfolio">
               <Button
                 size="lg"
                 variant="outline"
                 className="bg-transparent border-white text-white hover:bg-white/10"
               >
-                View More Projects
+                View Portfolio
               </Button>
             </Link>
           </div>
