@@ -1,20 +1,21 @@
-import { Card, CardContent } from '../components/ui/card';
-import { Target, Eye, Award, CheckCircle } from 'lucide-react';
-import { Link } from 'react-router';
-import { useContent } from '../contexts/ContentContext';
+import { Card, CardContent } from "../components/ui/card";
+import { Target, Eye, Award, CheckCircle } from "lucide-react";
+import { Link } from "react-router";
+import { useContent } from "../contexts/ContentContext";
 import aboutUs from "../../imports/iptm-nepal_logo.webp";
-import { PageHeroBackground } from '../components/PageHeroBackground';
+import { PageHeroBackground } from "../components/PageHeroBackground";
+
+// asd
 
 export function About() {
   const { teamMembers, pageHeroImages } = useContent();
-  const leadershipMember = teamMembers.find(member => member.isLeadership);
-  const otherMembers = teamMembers.filter(member => !member.isLeadership);
-
+  const leadershipMember = teamMembers.find((member) => member.isLeadership);
+  const otherMembers = teamMembers.filter((member) => !member.isLeadership);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -22,16 +23,13 @@ export function About() {
     <div>
       {/* Header Section */}
 
-
       <PageHeroBackground
-        image={pageHeroImages?.['about'] || ""}
+        image={pageHeroImages?.["about"] || ""}
         fallbackClassName="bg-gradient-to-r from-brand-500 to-brand-700 text-white"
       >
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-16">
           <div className="max-w-3xl">
-            <h1 className="text-4xl font-bold mb-4 text-white">
-              About Us
-            </h1>
+            <h1 className="text-4xl font-bold mb-4 text-white">About Us</h1>
 
             <p className="text-lg md:text-2xl leading-relaxed mb-6">
               A multidisciplinary engineering and management organization
@@ -42,25 +40,20 @@ export function About() {
           {/* Subsection Navigation */}
           <div className="flex flex-wrap gap-4">
             <button
-              onClick={() => scrollToSection('who-we-are')}
+              onClick={() => scrollToSection("who-we-are")}
               className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
             >
               Who We Are
             </button>
             <button
-              onClick={() => scrollToSection('our-team')}
+              onClick={() => scrollToSection("our-team")}
               className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
             >
               Our Team
             </button>
           </div>
         </div>
-
-
       </PageHeroBackground>
-
-
-
 
       {/* Who We Are Section */}
       <section
@@ -73,7 +66,6 @@ export function About() {
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
             {/* LEFT CONTENT */}
             <div>
               {/* Heading */}
@@ -84,12 +76,30 @@ export function About() {
 
               {/* Description */}
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                IPTM Nepal was established in 2010 A.D. to provide professional training and capacity-building services to individuals and organizations across Nepal. We work with government and non-government organizations, private companies, development organizations, and professionals from a wide range of sectors. IPTM delivers corporate training, professional development programs, skill development initiatives, workshops, seminars, technical events, and customized training solutions designed to enhance professional competencies and strengthen organizational capabilities.
-
+                IPTM Nepal was established in 2010 A.D. to provide professional
+                training and capacity-building services to individuals and
+                organizations across Nepal. We work with government and
+                non-government organizations, private companies, development
+                organizations, and professionals from a wide range of sectors.
+                IPTM delivers corporate training, professional development
+                programs, skill development initiatives, workshops, seminars,
+                technical events, and customized training solutions designed to
+                enhance professional competencies and strengthen organizational
+                capabilities.
               </p>
 
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                Our training programs provide individuals and organizations with practical knowledge, tools, and techniques to improve workplace performance, productivity, leadership, management, and organizational effectiveness. Our areas of expertise include leadership and management training, project management, technical and specialized training, human resource development, organizational development, and capacity building. By combining experienced professionals, industry-relevant knowledge, and practical learning approaches, IPTM Nepal helps organizations develop their workforce and achieve sustainable professional growth.
+                Our training programs provide individuals and organizations with
+                practical knowledge, tools, and techniques to improve workplace
+                performance, productivity, leadership, management, and
+                organizational effectiveness. Our areas of expertise include
+                leadership and management training, project management,
+                technical and specialized training, human resource development,
+                organizational development, and capacity building. By combining
+                experienced professionals, industry-relevant knowledge, and
+                practical learning approaches, IPTM Nepal helps organizations
+                develop their workforce and achieve sustainable professional
+                growth.
               </p>
 
               {/* Feature Points */}
@@ -134,10 +144,8 @@ export function About() {
 
             {/* RIGHT IMAGE */}
             <div className="relative">
-
               {/* Main Image */}
               <div className="relative rounded-[32px] overflow-hidden shadow-2xl border border-slate-200">
-
                 <img
                   src={aboutUs}
                   alt="IPTM Nepal team"
@@ -157,8 +165,8 @@ export function About() {
                   </h3>
 
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    Delivering infrastructure solutions and professional training
-                    with innovation, sustainability, and excellence.
+                    Delivering infrastructure solutions and professional
+                    training with innovation, sustainability, and excellence.
                   </p>
                 </div>
               </div>
@@ -192,7 +200,10 @@ export function About() {
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Recognized for delivering innovative and reliable solutions</p>
+                      <p>
+                        Recognized for delivering innovative and reliable
+                        solutions
+                      </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
@@ -213,15 +224,24 @@ export function About() {
                   <div className="text-sm text-gray-600 space-y-3 text-left">
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Enhance project quality through expert technical and management services</p>
+                      <p>
+                        Enhance project quality through expert technical and
+                        management services
+                      </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Strengthen institutional and human capacity across sectors</p>
+                      <p>
+                        Strengthen institutional and human capacity across
+                        sectors
+                      </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Deliver efficient, cost-effective, and sustainable solutions</p>
+                      <p>
+                        Deliver efficient, cost-effective, and sustainable
+                        solutions
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -262,15 +282,19 @@ export function About() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Our Team</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Our team consists of qualified and experienced professionals including engineers,
-              project managers, procurement experts, and administrative professionals who combine
-              technical expertise with practical experience.
+              Our team consists of qualified and experienced professionals
+              including engineers, project managers, procurement experts, and
+              administrative professionals who combine technical expertise with
+              practical experience.
             </p>
           </div>
 
           {teamMembers.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
-              <p>No team members added yet. Add team members from the admin dashboard.</p>
+              <p>
+                No team members added yet. Add team members from the admin
+                dashboard.
+              </p>
             </div>
           ) : (
             <>
@@ -289,9 +313,15 @@ export function About() {
                           <div className="inline-block px-3 py-1 bg-brand-100 text-brand-600 text-xs rounded-full mb-3 w-fit">
                             Leadership
                           </div>
-                          <h3 className="font-semibold text-2xl mb-2">{leadershipMember.name}</h3>
-                          <p className="text-brand-600 mb-4">{leadershipMember.position}</p>
-                          <p className="text-gray-600">{leadershipMember.bio}</p>
+                          <h3 className="font-semibold text-2xl mb-2">
+                            {leadershipMember.name}
+                          </h3>
+                          <p className="text-brand-600 mb-4">
+                            {leadershipMember.position}
+                          </p>
+                          <p className="text-gray-600">
+                            {leadershipMember.bio}
+                          </p>
                         </CardContent>
                       </div>
                     </Card>
@@ -311,8 +341,12 @@ export function About() {
                           className="w-full h-64 object-cover object-top"
                         />
                         <CardContent className="pt-6">
-                          <h3 className="font-semibold text-lg mb-1">{member.name}</h3>
-                          <p className="text-brand-600 text-sm mb-3">{member.position}</p>
+                          <h3 className="font-semibold text-lg mb-1">
+                            {member.name}
+                          </h3>
+                          <p className="text-brand-600 text-sm mb-3">
+                            {member.position}
+                          </p>
                           <p className="text-sm text-gray-600">{member.bio}</p>
                         </CardContent>
                       </Card>
@@ -340,7 +374,8 @@ export function About() {
               <CardContent className="pt-6">
                 <h3 className="font-semibold mb-2">Engineers</h3>
                 <p className="text-sm text-gray-600">
-                  Civil and infrastructure specialists with expertise in design, analysis, and project execution
+                  Civil and infrastructure specialists with expertise in design,
+                  analysis, and project execution
                 </p>
               </CardContent>
             </Card>
@@ -349,7 +384,8 @@ export function About() {
               <CardContent className="pt-6">
                 <h3 className="font-semibold mb-2">Project Managers</h3>
                 <p className="text-sm text-gray-600">
-                  Experienced professionals in planning, coordination, and delivery of complex projects
+                  Experienced professionals in planning, coordination, and
+                  delivery of complex projects
                 </p>
               </CardContent>
             </Card>
@@ -358,7 +394,8 @@ export function About() {
               <CardContent className="pt-6">
                 <h3 className="font-semibold mb-2">Procurement Experts</h3>
                 <p className="text-sm text-gray-600">
-                  Contract and procurement specialists ensuring compliance and value for money
+                  Contract and procurement specialists ensuring compliance and
+                  value for money
                 </p>
               </CardContent>
             </Card>
