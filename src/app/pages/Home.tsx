@@ -30,7 +30,7 @@ import { Helmet } from "react-helmet-async";
 import { slugify } from "../../utils/slug";
 
 const portfolioTypeLabels: Record<PublicPortfolioType, string> = {
-  project: "Project",
+  project: "Events & Workshops",
   training: "Training",
 };
 const FEATURED_WORK_SCROLL_DURATION = 80_000;
@@ -150,7 +150,7 @@ export function Home() {
   };
 
   const getPortfolioLink = (item: PublicPortfolioItem) => {
-    if (item.type === "project") return `/projects/${item.slug}`;
+    if (item.type === "project") return `/events-workshops/${item.slug}`;
     return `/training/${item.slug}`;
   };
 
@@ -309,39 +309,14 @@ export function Home() {
           <div className="relative z-[2] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="max-w-3xl">
               <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Capacity Building Company in Nepal
+                Professional Training & Capacity Building in Nepal
               </h1>
 
               <p className="text-lg md:text-xl mb-6 text-gray-100">
-                IPTM Nepal delivers expert capacity building, project support, and industry-driven
-                training solutions.
-              </p>
-
-              <p className="text-lg md:text-xl mb-8 text-gray-200">
-                We empower organizations and professionals through practical training and capacity-building solutions, delivered by experienced trainers to drive professional growth, organizational performance, and lasting impact.
+               IPTM Nepal is a professional training and consulting institute providing expert-led training, institutional capacity building, research, and consulting services for professionals and organizations across Nepal.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/about">
-                  <Button
-                    size="lg"
-                    className="
-        w-full sm:w-auto
-        px-6 py-2
-        rounded-full
-        bg-white/10
-        hover:bg-white/20
-        text-white
-        border border-white/30
-        transition-all duration-300
-        backdrop-blur-sm
-        cursor-pointer
-      "
-                  >
-                    Learn More
-                  </Button>
-                </Link>
-
                 <Link to="/portfolio">
                   <Button
                     size="lg"
@@ -358,13 +333,126 @@ export function Home() {
         cursor-pointer
       "
                   >
-                    View Portfolio
+                    Explore Our Portfolio
+                  </Button>
+                </Link>
+                 <Link to="/contact">
+                  <Button
+                    size="lg"
+                    className="
+        w-full sm:w-auto
+        px-6 py-2
+        rounded-full
+        bg-white/10
+        hover:bg-white/20
+        text-white
+        border border-white/30
+        transition-all duration-300
+        backdrop-blur-sm
+        cursor-pointer
+      "
+                  >
+                    Contact Us
                   </Button>
                 </Link>
               </div>
             </div>
           </div>
         </section>
+        
+{upcomingTrainingItems.length > 0 && (
+          <section className="bg-gray-50 py-16">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mb-10 text-center">
+                <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-brand-600">
+                  Learn with IPTM Nepal
+                </p>
+                <h2 className="mb-3 text-3xl font-bold text-gray-900">
+                  Upcoming Training
+                </h2>
+                <p className="mx-auto max-w-2xl text-gray-600">
+                  Build practical skills and strengthen your professional
+                  expertise with our upcoming programs.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {upcomingTrainingItems.map((training) => (
+                  <Card
+                    key={training.id}
+                    className="h-full overflow-hidden border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-lg"
+                  >
+                    <img
+                      src={training.featuredImage || engineering}
+                      alt={training.title}
+                      className="h-52 w-full object-cover"
+                    />
+                    <CardContent className="flex h-full flex-col p-6">
+                      <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                        {training.title}
+                      </h3>
+
+                      <div className="mb-4 space-y-2 text-sm text-gray-600">
+                        <p className="flex items-start gap-2">
+                          <CalendarDays className="mt-0.5 size-4 shrink-0 text-brand-600" />
+                          <span>
+                            {training.startDate
+                              ? formatTrainingDate(training.startDate)
+                              : "Date to be announced"}
+                            {" – "}
+                            {training.endDate
+                              ? formatTrainingDate(training.endDate)
+                              : "Date to be announced"}
+                          </span>
+                        </p>
+                        <p className="flex items-start gap-2">
+                          <MapPin className="mt-0.5 size-4 shrink-0 text-brand-600" />
+                          <span>
+                            {training.mode === "online"
+                              ? `Online${training.platform ? ` · ${training.platform}` : ""}`
+                              : [training.venue, training.address || training.location]
+                                  .filter(Boolean)
+                                  .join(", ") || "Location to be announced"}
+                          </span>
+                        </p>
+                      </div>
+
+                      <SanitizedHtml
+                        html={training.shortDescription}
+                        className="mb-6 line-clamp-3 text-sm text-gray-600 [&_p]:mb-1 [&_a]:text-brand-600 [&_a]:underline [&_strong]:font-semibold [&_em]:italic"
+                      />
+
+                      <Link
+                        to={`/training/${training.slug}`}
+                        className="mt-auto"
+                      >
+                        <Button className="w-full bg-brand-600 text-white hover:bg-brand-700">
+                          View Details
+                        </Button>
+                      </Link>
+                      {training.registerLink && (
+                        <a
+                          href={training.registerLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex w-full items-center justify-center rounded-md border border-brand-600 px-4 py-2 font-semibold text-brand-600 transition-colors hover:bg-brand-50"
+                        >
+                          Register
+                        </a>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="mt-8 text-center">
+                <Link to="/training">
+                  <Button variant="outline">View All Training</Button>
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Services Section */}
         <section className="py-16 bg-gray-50">
@@ -435,84 +523,6 @@ export function Home() {
           </div>
         </section>
 
-        {upcomingTrainingItems.length > 0 && (
-          <section className="bg-gray-50 py-16">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div className="mb-10 text-center">
-                <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-brand-600">
-                  Learn with IPTM Nepal
-                </p>
-                <h2 className="mb-3 text-3xl font-bold text-gray-900">
-                  Upcoming Training
-                </h2>
-                <p className="mx-auto max-w-2xl text-gray-600">
-                  Build practical skills and strengthen your professional
-                  expertise with our upcoming programs.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {upcomingTrainingItems.map((training) => (
-                  <Card
-                    key={training.id}
-                    className="h-full overflow-hidden border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-lg"
-                  >
-                    <img
-                      src={training.featuredImage || engineering}
-                      alt={training.title}
-                      className="h-52 w-full object-cover"
-                    />
-                    <CardContent className="flex h-full flex-col p-6">
-                      <h3 className="mb-3 text-xl font-semibold text-gray-900">
-                        {training.title}
-                      </h3>
-
-                      <div className="mb-4 space-y-2 text-sm text-gray-600">
-                        <p className="flex items-start gap-2">
-                          <CalendarDays className="mt-0.5 size-4 shrink-0 text-brand-600" />
-                          <span>
-                            {training.startDate
-                              ? formatTrainingDate(training.startDate)
-                              : "Date to be announced"}
-                            {" – "}
-                            {training.endDate
-                              ? formatTrainingDate(training.endDate)
-                              : "Date to be announced"}
-                          </span>
-                        </p>
-                        <p className="flex items-start gap-2">
-                          <MapPin className="mt-0.5 size-4 shrink-0 text-brand-600" />
-                          <span>{training.location || "Location to be announced"}</span>
-                        </p>
-                      </div>
-
-                      <SanitizedHtml
-                        html={training.shortDescription}
-                        className="mb-6 line-clamp-3 text-sm text-gray-600 [&_p]:mb-1 [&_a]:text-brand-600 [&_a]:underline [&_strong]:font-semibold [&_em]:italic"
-                      />
-
-                      <Link
-                        to={`/training/${training.slug}`}
-                        className="mt-auto"
-                      >
-                        <Button className="w-full bg-brand-600 text-white hover:bg-brand-700">
-                          View Details
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              <div className="mt-8 text-center">
-                <Link to="/training">
-                  <Button variant="outline">View All Training</Button>
-                </Link>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* Featured Work */}
         <section className="py-16">
           <style>{`
@@ -539,7 +549,7 @@ export function Home() {
               <div className="text-center sm:text-left">
                 <h2 className="text-3xl font-bold mb-4">Featured Work</h2>
                 <p className="text-gray-600">
-                  Explore our featured projects.
+                  Explore our training, events, and workshops.
                 </p>
               </div>
               <div

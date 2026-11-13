@@ -12,12 +12,24 @@ interface EventDetailProps {
 
 export function EventDetail({ backTo = "/training" }: EventDetailProps) {
   const { slug } = useParams();
-  const { events } = useContent();
+  const { events, portfolio } = useContent();
 
   const event = events.find((e) => e.slug === slug);
 
   if (!event) {
-    return <PortfolioItemDetail expectedType="training" backTo={backTo} />;
+    const portfolioItem = portfolio.find(
+      (item) =>
+        item.slug === slug &&
+        (item.type === "training" ||
+          (backTo === "/events-workshops" && item.type === "project")),
+    );
+
+    return (
+      <PortfolioItemDetail
+        expectedType={portfolioItem?.type === "project" ? "project" : "training"}
+        backTo={backTo}
+      />
+    );
   }
 
   return (

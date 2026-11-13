@@ -24,39 +24,39 @@ export function About() {
 
 
       <PageHeroBackground
-       image={pageHeroImages?.['about'] || ""}
+        image={pageHeroImages?.['about'] || ""}
         fallbackClassName="bg-gradient-to-r from-brand-500 to-brand-700 text-white"
       >
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-16">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl font-bold mb-4 text-white">
-                About Us
-              </h1>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-16">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl font-bold mb-4 text-white">
+              About Us
+            </h1>
 
-              <p className="text-lg md:text-2xl leading-relaxed mb-6">
-                A multidisciplinary engineering and management organization
-                dedicated to excellence.
-              </p>
-            </div>
-
-            {/* Subsection Navigation */}
-            <div className="flex flex-wrap gap-4">
-              <button
-                onClick={() => scrollToSection('who-we-are')}
-                className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
-              >
-                Who We Are
-              </button>
-              <button
-                onClick={() => scrollToSection('our-team')}
-                className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
-              >
-                Our Team
-              </button>
-            </div>
+            <p className="text-lg md:text-2xl leading-relaxed mb-6">
+              A multidisciplinary engineering and management organization
+              dedicated to excellence.
+            </p>
           </div>
-        
-      
+
+          {/* Subsection Navigation */}
+          <div className="flex flex-wrap gap-4">
+            <button
+              onClick={() => scrollToSection('who-we-are')}
+              className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
+            >
+              Who We Are
+            </button>
+            <button
+              onClick={() => scrollToSection('our-team')}
+              className="px-6 py-2 bg-white/10 hover:bg-white/20 cursor-pointer rounded-full text-white border border-white/30 transition-colors duration-200"
+            >
+              Our Team
+            </button>
+          </div>
+        </div>
+
+
       </PageHeroBackground>
 
 
@@ -89,7 +89,7 @@ export function About() {
               </p>
 
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-               Our training programs provide individuals and organizations with practical knowledge, tools, and techniques to improve workplace performance, productivity, leadership, management, and organizational effectiveness. Our areas of expertise include leadership and management training, project management, technical and specialized training, human resource development, organizational development, and capacity building. By combining experienced professionals, industry-relevant knowledge, and practical learning approaches, IPTM Nepal helps organizations develop their workforce and achieve sustainable professional growth.
+                Our training programs provide individuals and organizations with practical knowledge, tools, and techniques to improve workplace performance, productivity, leadership, management, and organizational effectiveness. Our areas of expertise include leadership and management training, project management, technical and specialized training, human resource development, organizational development, and capacity building. By combining experienced professionals, industry-relevant knowledge, and practical learning approaches, IPTM Nepal helps organizations develop their workforce and achieve sustainable professional growth.
               </p>
 
               {/* Feature Points */}
@@ -308,7 +308,7 @@ export function About() {
                         <img
                           src={member.imageUrl}
                           alt={member.name}
-                          className="w-full h-64 object-cover"
+                          className="w-full h-64 object-cover object-top"
                         />
                         <CardContent className="pt-6">
                           <h3 className="font-semibold text-lg mb-1">{member.name}</h3>

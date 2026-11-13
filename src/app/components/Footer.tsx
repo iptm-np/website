@@ -1,6 +1,7 @@
 import { useLocation, Link } from 'react-router';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { useContent } from '../contexts/ContentContext';
+import { getContactPhoneNumbers } from '../utils/contactPhones';
 
 export function Footer() {
   const location = useLocation();
@@ -13,7 +14,8 @@ export function Footer() {
 
   const address = contactInfo?.address || '';
   const email = contactInfo?.email || '';
-  const phone = contactInfo?.phone || '';
+  const { primaryPhone, secondaryPhones } = getContactPhoneNumbers(contactInfo);
+  const hasPhoneNumbers = Boolean(primaryPhone || secondaryPhones.length);
 
   return (
     <footer className="bg-gray-900 text-white mt-auto">
@@ -28,14 +30,21 @@ Leading professional training and capacity-building firm in Nepal, providing cor
           <div>
             <h4 className="font-semibold mb-4">Contact Us</h4>
             <div className="space-y-3">
-              {phone && (
+              {hasPhoneNumbers && (
                 <div className="flex items-center space-x-3 text-gray-400">
                   <Phone className="h-5 w-5" />
-                  <span>
-                    <a href={`tel:${phone}`} className="hover:text-white transition-colors">
-                      {phone}
-                    </a>
-                  </span>
+                  <div>
+                    {primaryPhone && (
+                      <p>
+                         <a href={`tel:${primaryPhone}`} className="hover:text-white transition-colors">{primaryPhone}</a>
+                      </p>
+                    )}
+                    {secondaryPhones.map((phone, index) => (
+                      <p key={`${phone}-${index}`}>
+                        <a href={`tel:${phone}`} className="hover:text-white transition-colors">{phone}</a>
+                      </p>
+                    ))}
+                  </div>
                 </div>
               )}
               {email && (
@@ -63,7 +72,7 @@ Leading professional training and capacity-building firm in Nepal, providing cor
                   </span>
                 </div>
               )}
-              {!phone && !email && !address && (
+              {!hasPhoneNumbers && !email && !address && (
                 <p className="text-gray-500 text-sm">Contact information not yet configured.</p>
               )}
             </div>

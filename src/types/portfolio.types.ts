@@ -51,7 +51,11 @@ export interface PortfolioItem {
   contractAmount?: string;
   serviceType?: string;
   trainingType?: string;
-  mode?: 'online' | 'physical' | 'hybrid';
+  mode?: 'online' | 'physical';
+  platform?: string;
+  venue?: string;
+  address?: string;
+  registerLink?: string;
   displayOnHome?: boolean;
   createdAt?: string;
   updatedAt?: string;

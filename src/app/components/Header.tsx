@@ -3,7 +3,8 @@ import { Mail, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useContent } from '../contexts/ContentContext';
 import { SiInstagram, SiFacebook, SiYoutube, SiTiktok, SiX } from 'react-icons/si';
-import logoImage from '../../imports/iptm-nepal_logo.webp';
+import { FaLinkedin } from "react-icons/fa";
+import logoNoBgImage from '../../imports/iptm-logo-nobg.png';
 
 export function Header() {
   const location = useLocation();
@@ -34,6 +35,7 @@ export function Header() {
     { label: 'YouTube', href: contactInfo?.youtube, icon: SiYoutube },
     { label: 'TikTok', href: contactInfo?.tiktok, icon: SiTiktok },
     { label: 'X', href: contactInfo?.x, icon: SiX },
+    { label: 'LinkedIn', href: contactInfo?.linkedin, icon: FaLinkedin },
   ].filter((social) => social.href?.trim());
 
   const externalUrl = (url: string) =>
@@ -42,10 +44,10 @@ export function Header() {
   return (
     <header className="bg-brand-600 shadow-sm sticky top-0 z-50">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex justify-between items-center py-4">
+    <div className="flex justify-between items-center py-3">
       
       <Link to="/" className="flex items-center">
-        <img src={logoImage} alt="IPTM Nepal Logo" className="h-12" />
+        <img src={logoNoBgImage} alt="IPTM Nepal Logo"  className="h-16 w-auto object-contain" />
       </Link>
 
       {/* Desktop Navigation */}

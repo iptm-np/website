@@ -134,12 +134,15 @@ export interface ContactInfo {
   address: string;
   email: string;
   phone: string;
+  primaryPhone?: string;
+  secondaryPhones?: string[];
   businessHours?: string;
   instagram?: string;
   facebook?: string;
   youtube?: string;
   tiktok?: string;
   x?: string;
+  linkedin?: string;
 }
 
 interface ContentContextType {

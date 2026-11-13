@@ -25,12 +25,12 @@ import { PortfolioFilters as PortfolioFiltersComponent } from '../components/por
 import { PageHeroBackground } from '../components/PageHeroBackground';
 
 const PAGE_SIZE = 10;
-const COMPANY_START_BS_YEAR = 2072;
+const COMPANY_START_BS_YEAR = 2067;
 const NEPALI_NEW_YEAR_MONTH_INDEX = 3;
 const NEPALI_NEW_YEAR_DAY = 14;
 
 const categoryLabels: Record<PublicPortfolioType, string> = {
-  project: 'Project',
+  project: 'Events & Workshops',
   training: 'Training',
 };
 
@@ -167,12 +167,12 @@ export function Portfolio() {
   const yearsOfExperience = getCurrentBsYear() - COMPANY_START_BS_YEAR;
 
   const stats = useMemo(() => {
-    const projects = publicPortfolio.filter((item) => item.type === 'project').length;
+    const EventsWorkshops = publicPortfolio.filter((item) => item.type === 'project').length;
     const trainingPrograms = publicPortfolio.filter((item) => item.type === 'training').length;
 
     return [
-      { label: 'Projects', value: `${projects}+`, icon: BriefcaseBusiness },
       { label: 'Training Programs', value: `${trainingPrograms}+`, icon: GraduationCap },
+      { label: 'Events & Workshops', value: `${EventsWorkshops}+`, icon: BriefcaseBusiness },
       { label: 'Years of Experience', value: `${yearsOfExperience}+`, icon: CalendarClock },
     ];
   }, [publicPortfolio]);

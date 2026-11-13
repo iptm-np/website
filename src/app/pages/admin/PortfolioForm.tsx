@@ -73,15 +73,16 @@ const backButtonClass = `
   active:scale-[0.98]
 `;
 
-// Config-driven type-details block keeps project and training fields aligned.
+// The same form supports both training and events/workshops; the type only
+// determines which page the item appears on, not which fields are shown.
 const typeConfig: Record<
   PortfolioType,
   { label: string; typeField: keyof PortfolioItem; typeLabel: string }
 > = {
   project: {
-    label: "Project Details",
+    label: "Portfolio Details",
     typeField: "projectType",
-    typeLabel: "Project Type",
+    typeLabel: "Event / Workshop / Training Type",
   },
   consulting: {
     label: "Consulting Details",
@@ -89,15 +90,15 @@ const typeConfig: Record<
     typeLabel: "Service Type",
   },
   training: {
-    label: "Training Details",
+    label: "Portfolio Details",
     typeField: "trainingType",
-    typeLabel: "Training Type",
+    typeLabel: "Event / Workshop / Training Type",
   },
 };
 
 const formatType = (type: PortfolioType) => {
   const labels: Record<PortfolioType, string> = {
-    project: "Project",
+    project: "Events & Workshops",
     consulting: "Consulting",
     training: "Training",
   };
@@ -119,6 +120,15 @@ const isValidFiscalYear = (value: string) => {
 const isValidImagePath = (value: string) =>
   /^(https?:\/\/|data:image\/|\/|\.\/|\.\.\/).+/.test(value) ||
   /^[\w./-]+\.(?:avif|gif|jpe?g|png|svg|webp)(?:\?.*)?$/.test(value);
+
+const isValidWebUrl = (value: string) => {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
 
 const getFieldError = (
   errors: PortfolioFormErrors,
@@ -170,7 +180,12 @@ export function PortfolioForm() {
 
     const existing = portfolio.find((item) => item.slug === editingSlug);
     if (existing) {
-      setForm({ ...createEmptyForm(), ...existing });
+      setForm({
+        ...createEmptyForm(),
+        ...existing,
+        mode: existing.mode === "online" ? "online" : "physical",
+        address: existing.address || existing.location || "",
+      });
       setEditingId(existing.id);
       setNotFound(false);
     } else if (portfolio.length > 0) {
@@ -206,7 +221,7 @@ export function PortfolioForm() {
   const fiscalYearOptions = useMemo(() => {
     const years = new Set<string>();
 
-    for (let year = 2070; year <= 2085; year++) {
+    for (let year = 2065; year <= 2085; year++) {
       years.add(`${year}/${String((year + 1) % 100).padStart(2, "0")}`);
     }
 
@@ -389,6 +404,11 @@ export function PortfolioForm() {
       contractAmount: form.contractAmount?.trim(),
       serviceType: form.serviceType?.trim(),
       trainingType: form.trainingType?.trim(),
+      mode: form.mode === "online" ? "online" : "physical",
+      platform: form.platform?.trim(),
+      venue: form.venue?.trim(),
+      address: form.address?.trim(),
+      registerLink: form.registerLink?.trim(),
       displayOnHome: Boolean(form.displayOnHome),
       updatedAt: now,
       createdAt: form.createdAt || now,
@@ -417,18 +437,27 @@ export function PortfolioForm() {
     if (featuredImage && !isValidImagePath(featuredImage)) {
       nextErrors.featuredImage = "Enter a valid image URL or relative path";
     }
+    if (
+      form.mode === "online" &&
+      !form.platform?.trim()
+    ) {
+      nextErrors.platform = "Platform is required for online events or training";
+    }
+    if (form.registerLink?.trim() && !isValidWebUrl(form.registerLink.trim())) {
+      nextErrors.registerLink = "Enter a valid http or https registration URL";
+    }
     if (fiscalYear && !isValidFiscalYear(fiscalYear)) {
       nextErrors.fiscalYear = "Use YYYY/YY with the next year, e.g. 2080/81";
     }
     if (form.startDate && form.endDate && form.endDate < form.startDate) {
       nextErrors.endDate = "End date cannot be before start date";
     }
-    if (form.type === "training" && form.displayOnHome) {
+    if (form.displayOnHome) {
       if (!form.startDate) {
-        nextErrors.startDate = "Start date is required for featured training";
+        nextErrors.startDate = "Start date is required for featured items";
       }
       if (!form.endDate) {
-        nextErrors.endDate = "End date is required for featured training";
+        nextErrors.endDate = "End date is required for featured items";
       }
     }
 
@@ -535,7 +564,7 @@ export function PortfolioForm() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="project">Project</SelectItem>
+                      <SelectItem value="project">Events & Workshops</SelectItem>
                       <SelectItem value="training">Training</SelectItem>
                     </SelectContent>
                   </Select>
@@ -644,30 +673,9 @@ export function PortfolioForm() {
                     }
                     aria-invalid={Boolean(errors.contractAmount)}
                   />
-                  {form.type === "training" && (
-                    <Select
-                      value={form.mode || "physical"}
-                      onValueChange={(value) =>
-                        updateForm(
-                          "mode",
-                          value as "online" | "physical" | "hybrid",
-                        )
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="online">Online</SelectItem>
-                        <SelectItem value="physical">Physical</SelectItem>
-                        <SelectItem value="hybrid">Hybrid</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
                 </div>
                 {getFieldError(errors, activeTypeConfig.typeField)}
                 {getFieldError(errors, "contractAmount")}
-                {form.type === "training" && getFieldError(errors, "mode")}
               </div>
             </div>
 
@@ -688,8 +696,8 @@ export function PortfolioForm() {
                   <span className="font-medium">Feature on Homepage</span>
                   <p className="text-gray-500">
                     {form.type === "training"
-                      ? "Show this training in Upcoming Training until its end date has passed. Start and end dates are required."
-                      : "Show this item in the homepage Featured Work section."}
+                      ? "Show this training on the homepage and training listing until its end date has passed. Start and end dates are required."
+                      : "Show this event/workshop on the homepage until its end date has passed. Start and end dates are required."}
                   </p>
                 </span>
               </label>
@@ -900,14 +908,76 @@ export function PortfolioForm() {
                   {getFieldError(errors, "sector")}
                 </div>
 
-                <div>
-                  <Label>Location</Label>
+                <div className="md:col-span-2">
+                  <Label>Mode</Label>
+                  <div className="mt-2 inline-flex rounded-md border border-slate-200 bg-slate-50 p-1">
+                    {(["online", "physical"] as const).map((mode) => (
+                      <Button
+                        key={mode}
+                        type="button"
+                        variant={form.mode === mode ? "default" : "ghost"}
+                        aria-pressed={form.mode === mode}
+                        onClick={() => updateForm("mode", mode)}
+                        className={
+                          form.mode === mode
+                            ? "bg-brand-600 text-white hover:bg-brand-700"
+                            : ""
+                        }
+                      >
+                        {mode === "online" ? "Online" : "Physical"}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {form.mode === "online" ? (
+                  <div>
+                    <Label>Platform *</Label>
+                    <Select
+                      value={form.platform || ""}
+                      onValueChange={(value) => updateForm("platform", value)}
+                    >
+                      <SelectTrigger aria-invalid={Boolean(errors.platform)}>
+                        <SelectValue placeholder="Select platform" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Zoom">Zoom</SelectItem>
+                        <SelectItem value="Google Meet">Google Meet</SelectItem>
+                        <SelectItem value="Microsoft Teams">Microsoft Teams</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {getFieldError(errors, "platform")}
+                  </div>
+                ) : (
+                  <>
+                    <div>
+                      <Label>Venue</Label>
+                      <Input
+                        value={form.venue || ""}
+                        onChange={(event) => updateForm("venue", event.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label>Address/Location</Label>
+                      <Input
+                        value={form.address || ""}
+                        onChange={(event) => updateForm("address", event.target.value)}
+                      />
+                    </div>
+                  </>
+                )}
+
+                <div className="md:col-span-2">
+                  <Label>Registration Link</Label>
                   <Input
-                    value={form.location || ""}
-                    onChange={(event) =>
-                      updateForm("location", event.target.value)
-                    }
+                    type="url"
+                    value={form.registerLink || ""}
+                    onChange={(event) => updateForm("registerLink", event.target.value)}
+                    placeholder="https://..."
+                    aria-invalid={Boolean(errors.registerLink)}
                   />
+                  {getFieldError(errors, "registerLink")}
                 </div>
               </div>
             </div>

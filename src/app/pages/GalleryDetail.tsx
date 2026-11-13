@@ -7,7 +7,7 @@ import { PublicPortfolioType } from "../../types/portfolio.types";
 import { getPublicPortfolioItems } from "../../services/portfolio.service";
 
 const typeBadgeLabels: Record<PublicPortfolioType, string> = {
-  project: "Project",
+  project: "Events & Workshops",
   training: "Training",
 };
 

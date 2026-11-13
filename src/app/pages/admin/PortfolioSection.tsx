@@ -33,7 +33,7 @@ type FeaturedFilter = "all" | "featured" | "not-featured";
 
 const formatType = (type: PortfolioType) => {
   const labels: Record<PortfolioType, string> = {
-    project: "Project",
+    project: "Events & Workshops",
     consulting: "Consulting",
     training: "Training",
   };
@@ -137,7 +137,7 @@ export function PortfolioSection() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="project">Projects</SelectItem>
+                <SelectItem value="project">Events & Workshops</SelectItem>
                 <SelectItem value="training">Training</SelectItem>
               </SelectContent>
             </Select>
