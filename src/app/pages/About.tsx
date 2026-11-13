@@ -5,8 +5,6 @@ import { useContent } from "../contexts/ContentContext";
 import aboutUs from "../../imports/iptm-nepal_logo.webp";
 import { PageHeroBackground } from "../components/PageHeroBackground";
 
-// asd
-
 export function About() {
   const { teamMembers, pageHeroImages } = useContent();
   const leadershipMember = teamMembers.find((member) => member.isLeadership);
