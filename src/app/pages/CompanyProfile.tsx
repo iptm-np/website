@@ -119,8 +119,7 @@ export function CompanyProfile() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Our Experience</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We have successfully delivered <span className="font-bold text-brand-600">100+ assignments</span> across Nepal,
-              working with government agencies, development partners, and private sector clients.
+              We have successfully delivered a wide range of assignments across Nepal, working with government agencies, development partners, and private sector clients.
             </p>
           </div>
 
