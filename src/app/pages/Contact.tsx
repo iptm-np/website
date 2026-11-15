@@ -247,7 +247,7 @@ export function Contact() {
                           <h3 className="font-semibold mb-1">Phone</h3>
                           {primaryPhone && (
                             <p className="text-gray-600">
-                           
+
                               <a href={`tel:${primaryPhone}`} className="text-brand-600 hover:underline">
                                 {primaryPhone}
                               </a>
@@ -255,7 +255,7 @@ export function Contact() {
                           )}
                           {secondaryPhones.map((phone, index) => (
                             <p key={`${phone}-${index}`} className="text-gray-600">
-                              
+
                               <a href={`tel:${phone}`} className="text-brand-600 hover:underline">
                                 {phone}
                               </a>
@@ -419,8 +419,8 @@ export function Contact() {
                       disabled={!isFormValid || loading}
                       className={`w-full h-12 rounded-xl font-semibold text-white shadow-md transition-all duration-300 flex items-center justify-center gap-2
     ${isFormValid && !loading
-                          ? "bg-green-500 hover:bg-green-600 hover:shadow-lg active:scale-[0.98]"
-                          : "bg-brand-600 hover:bg-brand-700 opacity-80 cursor-not-allowed"
+                          ? "bg-brand-600 hover:bg-brand-700 hover:shadow-lg active:scale-[0.98]"
+                          : "bg-brand-600/60 opacity-70 cursor-not-allowed"
                         }`}
                     >
                       {loading ? (
