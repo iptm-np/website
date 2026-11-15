@@ -5,10 +5,15 @@ import { useContent } from "../contexts/ContentContext";
 import aboutUs from "../../imports/iptm-nepal_logo.webp";
 import { PageHeroBackground } from "../components/PageHeroBackground";
 
+
+// asd
+
+
 export function About() {
   const { teamMembers, pageHeroImages } = useContent();
   const leadershipMember = teamMembers.find((member) => member.isLeadership);
   const otherMembers = teamMembers.filter((member) => !member.isLeadership);
+
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -17,9 +22,11 @@ export function About() {
     }
   };
 
+
   return (
     <div>
       {/* Header Section */}
+
 
       <PageHeroBackground
         image={pageHeroImages?.["about"] || ""}
@@ -29,11 +36,12 @@ export function About() {
           <div className="max-w-3xl">
             <h1 className="text-4xl font-bold mb-4 text-white">About Us</h1>
 
+
             <p className="text-lg md:text-2xl leading-relaxed mb-6">
-              A multidisciplinary engineering and management organization
-              dedicated to excellence.
+              Building Professional Capacity. Supporting Better Infrastructure.
             </p>
           </div>
+
 
           {/* Subsection Navigation */}
           <div className="flex flex-wrap gap-4">
@@ -53,6 +61,7 @@ export function About() {
         </div>
       </PageHeroBackground>
 
+
       {/* Who We Are Section */}
       <section
         id="who-we-are"
@@ -62,15 +71,17 @@ export function About() {
         <div className="absolute top-0 left-0 w-72 h-72 bg-brand-100 rounded-full blur-3xl opacity-40 -z-10" />
         <div className="absolute bottom-0 right-0 w-72 h-72 bg-brand-100 rounded-full blur-3xl opacity-40 -z-10" />
 
+
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* LEFT CONTENT */}
             <div>
               {/* Heading */}
               <h2 className="text-4xl md:text-5xl font-extrabold leading-tight text-gray-800 mb-6">
-                Building Nepal’s Future Through
-                <span className="text-brand-600"> Engineering Excellence</span>
+                Your Partner in
+                <span className="text-brand-600"> Professional Capacity Building</span>
               </h2>
+
 
               {/* Description */}
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
@@ -86,6 +97,7 @@ export function About() {
                 capabilities.
               </p>
 
+
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
                 Our training programs provide individuals and organizations with
                 practical knowledge, tools, and techniques to improve workplace
@@ -99,6 +111,7 @@ export function About() {
                 develop their workforce and achieve sustainable professional
                 growth.
               </p>
+
 
               {/* Feature Points */}
               <div className="grid grid-cols-2 gap-4 mb-8">
@@ -122,6 +135,7 @@ export function About() {
                 ))}
               </div>
 
+
               {/* CTA */}
               <div className="flex gap-4">
                 <a
@@ -131,6 +145,7 @@ export function About() {
                   Explore Our Portfolio
                 </a>
 
+
                 <a
                   href="/contact"
                   className="border border-gray-300 hover:border-brand-600 hover:text-brand-600 transition px-6 py-3 rounded-xl font-semibold text-gray-700"
@@ -139,6 +154,7 @@ export function About() {
                 </a>
               </div>
             </div>
+
 
             {/* RIGHT IMAGE */}
             <div className="relative">
@@ -150,11 +166,14 @@ export function About() {
                   className="w-full h-full object-cover"
                 />
 
+
                 {/* Dark Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
 
+
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
+
 
                 {/* Bottom Info Card */}
                 <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md rounded-2xl p-5 shadow-xl">
@@ -162,12 +181,14 @@ export function About() {
                     Trusted Engineering Partner in Nepal
                   </h3>
 
+
                   <p className="text-sm text-gray-600 leading-relaxed">
                     Delivering infrastructure solutions and professional
                     training with innovation, sustainability, and excellence.
                   </p>
                 </div>
               </div>
+
 
               {/* Floating Badge */}
               <div className="absolute -bottom-6 -right-6 bg-brand-600 text-white px-6 py-4 rounded-2xl shadow-2xl">
@@ -179,6 +200,7 @@ export function About() {
           </div>
         </div>
       </section>
+
 
       {/* Mission & Vision */}
       <section className="py-16 bg-gray-50">
@@ -194,23 +216,23 @@ export function About() {
                   <div className="text-sm text-gray-600 space-y-3 text-left">
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Leading organization in engineering and management</p>
+                      <p>Be a trusted partner in professional capacity building</p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
                       <p>
-                        Recognized for delivering innovative and reliable
-                        solutions
+                        Promote technical and professional excellence
                       </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Committed to sustainable development practices</p>
+                      <p>Contribute to sustainable development</p>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
+
 
             <Card>
               <CardContent className="pt-6">
@@ -223,28 +245,26 @@ export function About() {
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
                       <p>
-                        Enhance project quality through expert technical and
-                        management services
+                        Strengthen professional and institutional capacity
                       </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
                       <p>
-                        Strengthen institutional and human capacity across
-                        sectors
+                       Deliver quality training and technical consultancy
                       </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
                       <p>
-                        Deliver efficient, cost-effective, and sustainable
-                        solutions
+                        Promote efficient and sustainable solutions
                       </p>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
+
 
             <Card>
               <CardContent className="pt-6">
@@ -260,11 +280,11 @@ export function About() {
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Integrity and transparency</p>
+                      <p>Working with honesty and transparency</p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-brand-600 mt-0.5 flex-shrink-0" />
-                      <p>Innovation and collaboration</p>
+                      <p>Building partnerships and sharing knowledge</p>
                     </div>
                   </div>
                 </div>
@@ -273,6 +293,7 @@ export function About() {
           </div>
         </div>
       </section>
+
 
       {/* Our Team Section */}
       <section id="our-team" className="py-16 scroll-mt-20">
@@ -286,6 +307,7 @@ export function About() {
               practical experience.
             </p>
           </div>
+
 
           {teamMembers.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
@@ -327,6 +349,7 @@ export function About() {
                 </div>
               )}
 
+
               {/* Other Team Members */}
               {otherMembers.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -357,6 +380,7 @@ export function About() {
         </div>
       </section>
 
+
       {/* Expertise Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -366,6 +390,7 @@ export function About() {
               Our multidisciplinary team brings diverse skills and experience
             </p>
           </div>
+
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card>
@@ -378,6 +403,7 @@ export function About() {
               </CardContent>
             </Card>
 
+
             <Card>
               <CardContent className="pt-6">
                 <h3 className="font-semibold mb-2">Project Managers</h3>
@@ -388,6 +414,7 @@ export function About() {
               </CardContent>
             </Card>
 
+
             <Card>
               <CardContent className="pt-6">
                 <h3 className="font-semibold mb-2">Procurement Experts</h3>
@@ -397,6 +424,7 @@ export function About() {
                 </p>
               </CardContent>
             </Card>
+
 
             <Card>
               <CardContent className="pt-6">
@@ -412,3 +440,6 @@ export function About() {
     </div>
   );
 }
+
+
+
