@@ -297,11 +297,11 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
                         <div className="h-64 bg-gradient-to-br from-brand-600 via-brand-500 to-slate-800" />
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
-                      <div className="absolute top-4 right-4">
+                      {/* <div className="absolute top-4 right-4">
                         <span className="px-3 py-1 text-xs font-semibold rounded-full bg-gray-800 text-white">
                           {event.type}
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                     <CardContent className="pt-6">
                       <div className="mb-3 flex flex-wrap gap-2">
