@@ -3,6 +3,7 @@ import {
   PortfolioFilters,
   PortfolioSortKey,
   PortfolioSortOrder,
+  PortfolioType,
   PublicPortfolioItem,
 } from '../types/portfolio.types';
 
@@ -113,15 +114,13 @@ export function sortPortfolioItems(
  */
 export function getItemsByType(
   items: PortfolioItem[],
-  type: 'project' | 'consulting' | 'training'
+  type: PortfolioType
 ): PortfolioItem[] {
   return items.filter((item) => item.type === type);
 }
 
 export function getPublicPortfolioItems(items: PortfolioItem[]): PublicPortfolioItem[] {
-  return items.filter(
-    (item): item is PublicPortfolioItem => item.type !== 'consulting',
-  );
+  return items;
 }
 
 /**
@@ -206,8 +205,8 @@ export function getUniqueFilterValues(items: PortfolioItem[]) {
 /**
  * Get unique types in portfolio
  */
-export function getUniqueTypes(items: PortfolioItem[]): ('project' | 'consulting' | 'training')[] {
-  const types = new Set<'project' | 'consulting' | 'training'>();
+export function getUniqueTypes(items: PortfolioItem[]): PortfolioType[] {
+  const types = new Set<PortfolioType>();
   items.forEach((item) => types.add(item.type));
   return Array.from(types);
 }
@@ -220,6 +219,7 @@ export function getPortfolioStats(items: PortfolioItem[]) {
     totalItems: items.length,
     projects: getItemsByType(items, 'project').length,
     training: getItemsByType(items, 'training').length,
+    consulting: getItemsByType(items, 'consulting').length,
     totalContractValue: items.reduce((sum, item) => {
       const amount = parseFloat((item.contractAmount || '').replace(/,/g, '')) || 0;
       return sum + amount;

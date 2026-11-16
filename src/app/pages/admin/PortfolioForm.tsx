@@ -73,8 +73,8 @@ const backButtonClass = `
   active:scale-[0.98]
 `;
 
-// The same form supports both training and events/workshops; the type only
-// determines which page the item appears on, not which fields are shown.
+// The same form supports all portfolio types; the type selects the relevant
+// category field and determines the public listing where the item appears.
 const typeConfig: Record<
   PortfolioType,
   { label: string; typeField: keyof PortfolioItem; typeLabel: string }
@@ -566,6 +566,7 @@ export function PortfolioForm() {
                     <SelectContent>
                       <SelectItem value="project">Events & Workshops</SelectItem>
                       <SelectItem value="training">Training</SelectItem>
+                      <SelectItem value="consulting">Consulting</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -650,7 +651,7 @@ export function PortfolioForm() {
               </div>
             </div>
 
-            {/* Type-specific details share one render path for project and training items. */}
+            {/* Type-specific details share one render path for every portfolio type. */}
             <div className="border-t pt-6">
               <div className="space-y-3 rounded-lg border p-4">
                 <h3 className="font-semibold">{activeTypeConfig.label}</h3>
@@ -697,7 +698,9 @@ export function PortfolioForm() {
                   <p className="text-gray-500">
                     {form.type === "training"
                       ? "Show this training on the homepage and training listing until its end date has passed. Start and end dates are required."
-                      : "Show this event/workshop on the homepage until its end date has passed. Start and end dates are required."}
+                      : form.type === "consulting"
+                        ? "Show this consulting service in featured work on the homepage and on the consulting listing. Start and end dates are required."
+                        : "Show this event/workshop on the homepage until its end date has passed. Start and end dates are required."}
                   </p>
                 </span>
               </label>

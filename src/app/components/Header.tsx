@@ -23,6 +23,7 @@ export function Header() {
     { path: '/about', label: 'About Us' },
     { path: '/company-profile', label: 'Company Profile' },
     { path: '/portfolio', label: 'Portfolio' },
+    { path: '/consulting', label: 'Consulting' },
     { path: '/training', label: 'Training' },
     { path: '/events-workshops', label: 'Events & Workshops' },
     { path: '/gallery', label: 'Gallery' },

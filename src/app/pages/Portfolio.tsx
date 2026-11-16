@@ -5,6 +5,7 @@ import {
   BriefcaseBusiness,
   CalendarClock,
   GraduationCap,
+  Handshake,
   ArrowDown,
   ArrowUp,
 } from 'lucide-react';
@@ -32,11 +33,13 @@ const NEPALI_NEW_YEAR_DAY = 14;
 const categoryLabels: Record<PublicPortfolioType, string> = {
   project: 'Events & Workshops',
   training: 'Training',
+  consulting: 'Consulting',
 };
 
 const categoryStyles: Record<PublicPortfolioType, string> = {
   project: 'bg-blue-50 text-blue-700 ring-blue-100',
   training: 'bg-violet-50 text-violet-700 ring-violet-100',
+  consulting: 'bg-brand-50 text-brand-700 ring-brand-100',
 };
 
 function getItemLink(item: PublicPortfolioItem) {
@@ -45,6 +48,8 @@ function getItemLink(item: PublicPortfolioItem) {
       return `/projects/${item.slug}`;
     case 'training':
       return `/training/${item.slug}`;
+    case 'consulting':
+      return `/consulting/${item.slug}`;
     default:
       return '/portfolio';
   }
@@ -167,15 +172,16 @@ export function Portfolio() {
   const yearsOfExperience = getCurrentBsYear() - COMPANY_START_BS_YEAR;
 
   const stats = useMemo(() => {
-    const EventsWorkshops = publicPortfolio.filter((item) => item.type === 'project').length;
+    const eventsWorkshops = publicPortfolio.filter((item) => item.type === 'project').length;
     const trainingPrograms = publicPortfolio.filter((item) => item.type === 'training').length;
-
+    const consultingServices = publicPortfolio.filter((item) => item.type === 'consulting').length;
     return [
       { label: 'Training Programs', value: `${trainingPrograms}+`, icon: GraduationCap },
-      { label: 'Events & Workshops', value: `${EventsWorkshops}+`, icon: BriefcaseBusiness },
+      { label: 'Events & Workshops', value: `${eventsWorkshops}+`, icon: BriefcaseBusiness },
+      { label: 'Consulting Assignments', value: `${consultingServices}+`, icon: Handshake },
       { label: 'Years of Experience', value: `${yearsOfExperience}+`, icon: CalendarClock },
     ];
-  }, [publicPortfolio]);
+  }, [publicPortfolio, yearsOfExperience]);
 
   const updateFilters = (updates: Partial<PortfolioFiltersState>) => {
     if (Object.prototype.hasOwnProperty.call(updates, 'client')) {
@@ -231,7 +237,7 @@ export function Portfolio() {
     Boolean(filters.client) ||
     Boolean(filters.search);
 
-  const handleRowClick = (item: PortfolioItem) => {
+  const handleRowClick = (item: PublicPortfolioItem) => {
     navigate(getItemLink(item));
   };
 
@@ -256,7 +262,7 @@ export function Portfolio() {
       
 
       <PageHeroBackground
-      image={pageHeroImages?.['portfolio']  || ""}
+      image={pageHeroImages?.portfolio || ""}
               fallbackClassName="relative bg-gradient-to-r from-brand-500 to-brand-700 text-white"
             >
              
@@ -271,7 +277,7 @@ export function Portfolio() {
             </PageHeroBackground>
 
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map(({ label, value, icon: Icon }) => (
             <div
               key={label}

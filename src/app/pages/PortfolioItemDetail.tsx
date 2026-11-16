@@ -16,11 +16,13 @@ import { SanitizedHtml } from "../components/ui/sanitized-html";
 const typeLabels: Record<PublicPortfolioType, string> = {
   project: "Events & Workshops",
   training: "Training Program",
+  consulting: "Consulting",
 };
 
 const backLinks: Record<PublicPortfolioType, string> = {
   project: "/portfolio",
   training: "/portfolio",
+  consulting: "/consulting",
 };
 
 interface PortfolioItemDetailProps {
@@ -30,6 +32,7 @@ interface PortfolioItemDetailProps {
 
 function getSpecificLabel(item: PublicPortfolioItem) {
   if (item.type === "project") return item.projectType || "Engineering Project";
+  if (item.type === "consulting") return item.serviceType || "Consulting Service";
   return item.trainingType || "Training & Capacity Building";
 }
 
@@ -59,7 +62,11 @@ export function PortfolioItemDetail({
           <Link to={backTo || "/portfolio"}>
             <Button className="mt-8">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to {backTo === "/events-workshops" ? "Events & Workshops" : "Portfolio"}
+              Back to {backTo === "/events-workshops"
+                ? "Events & Workshops"
+                : backTo === "/consulting"
+                  ? "Consulting"
+                  : "Portfolio"}
             </Button>
           </Link>
         </div>
@@ -191,7 +198,11 @@ export function PortfolioItemDetail({
 
         <aside className="h-fit rounded-lg border border-slate-200 bg-slate-50 p-6">
           <h3 className="text-lg font-bold text-slate-950">
-            {item.type === "training" ? "Training Information" : "Project Information"}
+            {item.type === "training"
+              ? "Training Information"
+              : item.type === "consulting"
+                ? "Consulting Information"
+                : "Project Information"}
           </h3>
           <dl className="mt-5 space-y-4 text-sm">
             <div>

@@ -1,8 +1,5 @@
-export type PortfolioType =
-  | 'project'
-  | 'consulting'
-  | 'training';
-export type PublicPortfolioType = Exclude<PortfolioType, 'consulting'>;
+export type PortfolioType = 'project' | 'training' | 'consulting';
+export type PublicPortfolioType = PortfolioType;
 
 export type PortfolioStatus =
   | 'upcoming'
@@ -61,9 +58,7 @@ export interface PortfolioItem {
   updatedAt?: string;
 }
 
-export type PublicPortfolioItem = Omit<PortfolioItem, 'type'> & {
-  type: PublicPortfolioType;
-};
+export type PublicPortfolioItem = PortfolioItem;
 
 export const defaultPortfolioFormData: PortfolioItem = {
   id: '',

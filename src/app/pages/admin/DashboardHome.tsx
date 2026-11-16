@@ -4,6 +4,7 @@ import { useContent } from '../../contexts/ContentContext';
 import {
   Building2,
   GraduationCap,
+  BriefcaseBusiness,
   Users,
   Landmark,
   Factory,
@@ -36,6 +37,10 @@ export function DashboardHome() {
     (item) => item.type === 'training'
   ).length;
 
+  const consultingCount = portfolio.filter(
+    (item) => item.type === 'consulting'
+  ).length;
+
   const stats: {
     label: string;
     value: number;
@@ -52,6 +57,12 @@ export function DashboardHome() {
       label: 'Trainings',
       value: trainingCount,
       icon: GraduationCap,
+      section: 'portfolio',
+    },
+    {
+      label: 'Consulting',
+      value: consultingCount,
+      icon: BriefcaseBusiness,
       section: 'portfolio',
     },
     {

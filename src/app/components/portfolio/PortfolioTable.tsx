@@ -10,6 +10,7 @@ import {
   PortfolioFilters,
   PortfolioSortKey,
   PortfolioSortOrder,
+  PortfolioType,
 } from '../../../types/portfolio.types';
 import {
   filterPortfolioItems,
@@ -22,7 +23,7 @@ interface PortfolioTableProps {
   items: PortfolioItem[];
   title?: string;
   showTypeFilter?: boolean;
-  allowedTypes?: ('project' | 'training')[];
+  allowedTypes?: PortfolioType[];
 }
 
 export function PortfolioTable({
@@ -81,7 +82,9 @@ export function PortfolioTable({
       case 'project':
         return `/events-workshops/${item.slug}`;
       case 'training':
-        return `/events/${item.slug}`;
+        return `/training/${item.slug}`;
+      case 'consulting':
+        return `/consulting/${item.slug}`;
       default:
         return '#';
     }
@@ -140,6 +143,7 @@ export function PortfolioTable({
                     <SelectItem value="all">All Types</SelectItem>
                     <SelectItem value="project">Events & Workshops</SelectItem>
                     <SelectItem value="training">Training/Events</SelectItem>
+                    <SelectItem value="consulting">Consulting</SelectItem>
                   </SelectContent>
                 </Select>
               )}

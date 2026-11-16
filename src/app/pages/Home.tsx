@@ -32,6 +32,7 @@ import { slugify } from "../../utils/slug";
 const portfolioTypeLabels: Record<PublicPortfolioType, string> = {
   project: "Events & Workshops",
   training: "Training",
+  consulting: "Consulting",
 };
 const FEATURED_WORK_SCROLL_DURATION = 80_000;
 
@@ -151,7 +152,8 @@ export function Home() {
 
   const getPortfolioLink = (item: PublicPortfolioItem) => {
     if (item.type === "project") return `/events-workshops/${item.slug}`;
-    return `/training/${item.slug}`;
+    if (item.type === "training") return `/training/${item.slug}`;
+    return `/consulting/${item.slug}`;
   };
 
   const getClientPortfolioLink = (clientId: string) =>
@@ -549,7 +551,7 @@ export function Home() {
               <div className="text-center sm:text-left">
                 <h2 className="text-3xl font-bold mb-4">Featured Work</h2>
                 <p className="text-gray-600">
-                  Explore our training, events, and workshops.
+                  Explore our training, events & workshops and consulting services
                 </p>
               </div>
               <div

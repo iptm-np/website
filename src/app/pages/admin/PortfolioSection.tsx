@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { Edit, Search, Trash2, Plus } from "lucide-react";
 import { PortfolioItem, PortfolioType } from "../../../types/portfolio.types";
 
-type TypeFilter = Exclude<PortfolioType, "consulting"> | "all";
+type TypeFilter = PortfolioType | "all";
 type FeaturedFilter = "all" | "featured" | "not-featured";
 
 const formatType = (type: PortfolioType) => {
@@ -139,6 +139,7 @@ export function PortfolioSection() {
                 <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="project">Events & Workshops</SelectItem>
                 <SelectItem value="training">Training</SelectItem>
+                <SelectItem value="consulting">Consulting</SelectItem>
               </SelectContent>
             </Select>
 

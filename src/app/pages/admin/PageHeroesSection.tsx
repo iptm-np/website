@@ -10,6 +10,7 @@ const PAGES: { key: keyof PageHeroImages; label: string; hint: string }[] = [
   { key: "about", label: "About Us", hint: "/about" },
   { key: "companyProfile", label: "Company Profile", hint: "/company-profile" },
   { key: "portfolio", label: "Portfolio", hint: "/portfolio" },
+  { key: "consulting", label: "Consulting", hint: "/consulting" },
   { key: "training", label: "Training", hint: "/training" },
   { key: "projects", label: "Events & Workshops", hint: "/events-workshops" },
   { key: "contact", label: "Contact", hint: "/contact" },

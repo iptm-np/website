@@ -96,6 +96,11 @@ Leading professional training and capacity-building firm in Nepal, providing cor
                   Portfolio
                 </Link>
               </li>
+               <li>
+                 <Link to="/consulting" className="hover:text-white transition-colors">
+                   Consulting
+                 </Link>
+               </li>
               <li>
                 <Link to="/training" className="hover:text-white transition-colors">
                   Training

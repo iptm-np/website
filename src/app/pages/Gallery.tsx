@@ -9,6 +9,7 @@ import { getPublicPortfolioItems } from "../../services/portfolio.service";
 const typeBadgeLabels: Record<PublicPortfolioType, string> = {
   project: "Events & Workshops",
   training: "Training",
+  consulting: "Consulting",
 };
 
 export function Gallery() {

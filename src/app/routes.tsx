@@ -7,6 +7,7 @@ import { EventsWorkshops } from './pages/EventsWorkshops';
 import { ProjectDetail } from './pages/ProjectDetail';
 import { EventDetail } from './pages/EventDetail';
 import { Contact } from './pages/Contact';
+import { ConsultingService } from './pages/ConsultingService';
 import { Portfolio } from './pages/Portfolio';
 import { Team } from './pages/Team';
 import { TeamMemberDetail } from './pages/TeamMemberDetail';
@@ -58,6 +59,11 @@ export const router = createBrowserRouter([
       { path: 'projects', Component: EventsWorkshops },
       { path: 'projects/:slug', Component: ProjectDetail },
       { path: 'portfolio', Component: Portfolio },
+      { path: 'consulting', Component: ConsultingService },
+      {
+        path: 'consulting/:slug',
+        element: <PortfolioItemDetail expectedType="consulting" backTo="/consulting" />,
+      },
       { path: 'contact', Component: Contact },
       { path: 'gallery', Component: Gallery },
       { path: 'gallery/:slug', Component: GalleryDetail },
