@@ -6,6 +6,7 @@ import {
   PortfolioType,
   PublicPortfolioItem,
 } from '../types/portfolio.types';
+import { isValidADDateKey } from '../utils/nepaliDate';
 
 /** Strip HTML tags for plain-text search */
 function stripHtml(html: string): string {
@@ -64,6 +65,24 @@ export function filterPortfolioItems<T extends PortfolioItem>(
 // ============================================================================
 // SORTING
 // ============================================================================
+
+function getStartDateKey(value?: string | null) {
+  const dateKey = /^(\d{4}-\d{2}-\d{2})(?:T.*)?$/.exec(value || '')?.[1];
+  return dateKey && isValidADDateKey(dateKey) ? dateKey : null;
+}
+
+export function sortByStartDateDesc<T extends { startDate?: string | null }>(
+  items: readonly T[],
+): T[] {
+  return [...items].sort((a, b) => {
+    const dateA = getStartDateKey(a.startDate);
+    const dateB = getStartDateKey(b.startDate);
+
+    if (!dateA) return dateB ? 1 : 0;
+    if (!dateB) return -1;
+    return dateB.localeCompare(dateA);
+  });
+}
 
 /**
  * Sort portfolio items by specified key and order

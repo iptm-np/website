@@ -12,8 +12,6 @@ import {
   MapPin,
   LayoutGrid,
   Table2,
-  ArrowUp,
-  ArrowDown,
 } from "lucide-react";
 import { Link } from "react-router";
 import { useContent } from "../contexts/ContentContext";
@@ -22,6 +20,7 @@ import { SanitizedHtml } from "../components/ui/sanitized-html";
 import { PortfolioFilters as PortfolioFiltersComponent } from "../components/portfolio/PortfolioFilters";
 import { PortfolioFiltersState } from "../../types/portfolio.types";
 import { formatBSDate } from "../../utils/nepaliDate";
+import { sortByStartDateDesc } from "../../services/portfolio.service";
 
 interface TrainingProps {
   pageVariant?: "training" | "events-workshops";
@@ -34,7 +33,6 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
     : "/training";
   const { events, portfolio, clients, pageHeroImages } = useContent();
   const [view, setView] = useState<"grid" | "table">("grid");
-  const [fySortOrder, setFySortOrder] = useState<"desc" | "asc">("desc");
   const [filters, setFilters] = useState<PortfolioFiltersState>({
     type: "all",
     sector: undefined,
@@ -137,8 +135,8 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
     Boolean(filters.client) ||
     Boolean(filters.search);
 
-  const filteredItems = trainingItems
-    .filter((item) => {
+  const filteredItems = sortByStartDateDesc(
+    trainingItems.filter((item) => {
       const search = (filters.search || "").toLowerCase();
       const matchesSearch =
         !search ||
@@ -151,14 +149,8 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
       return (
         matchesSearch && matchesSector && matchesFiscalYear && matchesClient
       );
-    })
-    .sort((a, b) => {
-      const yearA = a.fiscalYear || "0000";
-      const yearB = b.fiscalYear || "0000";
-      return fySortOrder === "desc"
-        ? yearB.localeCompare(yearA)
-        : yearA.localeCompare(yearB);
-    });
+    }),
+  );
 
   const isEmpty = filteredItems.length === 0;
 
@@ -392,22 +384,8 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
                     <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                       Sector
                     </th>
-                    <th
-                      onClick={() =>
-                        setFySortOrder((prev) =>
-                          prev === "desc" ? "asc" : "desc",
-                        )
-                      }
-                      className="cursor-pointer px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider"
-                    >
-                      <div className="flex items-center gap-2">
-                        Fiscal Year
-                        {fySortOrder === "desc" ? (
-                          <ArrowDown className="h-3 w-3" />
-                        ) : (
-                          <ArrowUp className="h-3 w-3" />
-                        )}
-                      </div>
+                    <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
+                      Fiscal Year
                     </th>
                     <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider"></th>
                   </tr>

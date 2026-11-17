@@ -1,8 +1,6 @@
 import { useMemo, useState } from "react";
 import {
-  ArrowDown,
   ArrowRight,
-  ArrowUp,
   BarChart,
   Calendar,
   CheckCircle,
@@ -23,6 +21,7 @@ import { PortfolioFiltersState } from "../../types/portfolio.types";
 import {
   filterPortfolioItems,
   getUniqueFilterValues,
+  sortByStartDateDesc,
 } from "../../services/portfolio.service";
 
 const sectors = [
@@ -65,7 +64,6 @@ const whyChooseUs = [
 export function ConsultingService() {
   const { portfolio, clients, pageHeroImages } = useContent();
   const [view, setView] = useState<"grid" | "table">("grid");
-  const [fySortOrder, setFySortOrder] = useState<"desc" | "asc">("desc");
   const [filters, setFilters] = useState<PortfolioFiltersState>({
     type: "all",
     sector: undefined,
@@ -105,14 +103,8 @@ export function ConsultingService() {
 
   const filteredAssignments = useMemo(() => {
     const filtered = filterPortfolioItems(consultingAssignments, filters);
-    return filtered.sort((a, b) => {
-      const yearA = a.fiscalYear || "0000";
-      const yearB = b.fiscalYear || "0000";
-      return fySortOrder === "desc"
-        ? yearB.localeCompare(yearA)
-        : yearA.localeCompare(yearB);
-    });
-  }, [consultingAssignments, filters, fySortOrder]);
+    return sortByStartDateDesc(filtered);
+  }, [consultingAssignments, filters]);
 
   const handleDownloadCsv = () => {
     const escapeCsvValue = (value?: string) =>
@@ -328,25 +320,8 @@ export function ConsultingService() {
                       <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                         Sector
                       </th>
-                      <th
-                        onClick={() =>
-                          setFySortOrder((current) =>
-                            current === "desc" ? "asc" : "desc",
-                          )
-                        }
-                        aria-sort={
-                          fySortOrder === "desc" ? "descending" : "ascending"
-                        }
-                        className="cursor-pointer px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider"
-                      >
-                        <div className="flex items-center gap-2">
-                          Fiscal Year
-                          {fySortOrder === "desc" ? (
-                            <ArrowDown className="h-3 w-3" />
-                          ) : (
-                            <ArrowUp className="h-3 w-3" />
-                          )}
-                        </div>
+                      <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
+                        Fiscal Year
                       </th>
                       <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                         Details

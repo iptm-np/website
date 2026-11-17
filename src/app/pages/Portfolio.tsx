@@ -6,8 +6,6 @@ import {
   CalendarClock,
   GraduationCap,
   Handshake,
-  ArrowDown,
-  ArrowUp,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useContent } from '../contexts/ContentContext';
@@ -20,6 +18,7 @@ import {
   filterPortfolioItems,
   getPublicPortfolioItems,
   getUniqueFilterValues,
+  sortByStartDateDesc,
 } from '../../services/portfolio.service';
 import { slugify } from '../../utils/slug';
 import { PortfolioFilters as PortfolioFiltersComponent } from '../components/portfolio/PortfolioFilters';
@@ -53,10 +52,6 @@ function getItemLink(item: PublicPortfolioItem) {
     default:
       return '/portfolio';
   }
-}
-
-function getFiscalYearSortValue(year?: string) {
-  return year || '0000';
 }
 
 function getCurrentBsYear(date = new Date()) {
@@ -101,7 +96,6 @@ export function Portfolio() {
     [portfolio],
   );
   const [page, setPage] = useState(1);
-  const [fySortOrder, setFySortOrder] = useState<'desc' | 'asc'>('desc');
   const [filters, setFilters] = useState<PortfolioFiltersState>({
     type: 'all',
     sector: undefined,
@@ -156,16 +150,8 @@ export function Portfolio() {
 
   const filteredItems = useMemo(() => {
     const filtered = filterPortfolioItems(publicPortfolio, filters);
-
-    return [...filtered].sort((a, b) => {
-      const yearA = getFiscalYearSortValue(a.fiscalYear);
-      const yearB = getFiscalYearSortValue(b.fiscalYear);
-
-      return fySortOrder === 'desc'
-        ? yearB.localeCompare(yearA)
-        : yearA.localeCompare(yearB);
-    });
-  }, [publicPortfolio, filters, fySortOrder]);
+    return sortByStartDateDesc(filtered);
+  }, [publicPortfolio, filters]);
 
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
   const visibleItems = filteredItems.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -328,18 +314,8 @@ export function Portfolio() {
                   <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                     Type
                   </th>
-                  <th
-                    onClick={() => setFySortOrder((prev) => (prev === 'desc' ? 'asc' : 'desc'))}
-                    className="cursor-pointer px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider"
-                  >
-                    <div className="flex items-center gap-2">
-                      Fiscal Year
-                      {fySortOrder === 'desc' ? (
-                        <ArrowDown className="h-3 w-3" />
-                      ) : (
-                        <ArrowUp className="h-3 w-3" />
-                      )}
-                    </div>
+                  <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
+                    Fiscal Year
                   </th>
                   <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                     Client
