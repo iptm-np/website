@@ -3,12 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
+import { BSDatePicker } from '../../components/ui/bs-date-picker';
 import { Textarea } from '../../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { useContent } from '../../contexts/ContentContext';
 import { toast } from 'sonner';
 import { Edit, Trash2, X } from 'lucide-react';
 import { PortfolioItem, ProjectMetadata, defaultProjectFormData } from '../../../types/portfolio.types';
+import { isValidADDateKey } from '../../../utils/nepaliDate';
 
 export function ProjectsSection() {
   const { projects, addPortfolioItem, updatePortfolioItem, deletePortfolioItem } = useContent();
@@ -49,6 +51,14 @@ export function ProjectsSection() {
     const metadata = form.metadata as ProjectMetadata;
     if (!metadata.startDate || !metadata.endDate) {
       toast.error('Project start and end dates are required');
+      return;
+    }
+    if (
+      isValidADDateKey(metadata.startDate) &&
+      isValidADDateKey(metadata.endDate) &&
+      metadata.endDate < metadata.startDate
+    ) {
+      toast.error('Project end date cannot be before its start date');
       return;
     }
 
@@ -235,33 +245,33 @@ export function ProjectsSection() {
 
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <Label htmlFor="startDate">Start Date *</Label>
-                  <Input
+                  <Label htmlFor="startDate-year">Start Date (BS) *</Label>
+                  <BSDatePicker
+                    key={`${editingId || 'new'}-startDate`}
                     id="startDate"
-                    type="date"
+                    label="Project start date"
                     value={metadata.startDate}
-                    onChange={(e) =>
+                    onChange={(value) =>
                       setForm({
                         ...form,
-                        metadata: { ...metadata, startDate: e.target.value },
+                        metadata: { ...metadata, startDate: value },
                       })
                     }
-                    required
                   />
                 </div>
                 <div>
-                  <Label htmlFor="endDate">End Date *</Label>
-                  <Input
+                  <Label htmlFor="endDate-year">End Date (BS) *</Label>
+                  <BSDatePicker
+                    key={`${editingId || 'new'}-endDate`}
                     id="endDate"
-                    type="date"
+                    label="Project end date"
                     value={metadata.endDate}
-                    onChange={(e) =>
+                    onChange={(value) =>
                       setForm({
                         ...form,
-                        metadata: { ...metadata, endDate: e.target.value },
+                        metadata: { ...metadata, endDate: value },
                       })
                     }
-                    required
                   />
                 </div>
               </div>

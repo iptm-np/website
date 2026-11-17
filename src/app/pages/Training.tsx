@@ -21,6 +21,7 @@ import { PageHeroBackground } from "../components/PageHeroBackground";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
 import { PortfolioFilters as PortfolioFiltersComponent } from "../components/portfolio/PortfolioFilters";
 import { PortfolioFiltersState } from "../../types/portfolio.types";
+import { formatBSDate } from "../../utils/nepaliDate";
 
 interface TrainingProps {
   pageVariant?: "training" | "events-workshops";
@@ -330,7 +331,8 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
                       <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
                         <Calendar className="h-4 w-4" />
                         <span>
-                          {event.startDate} - {event.endDate}
+                          {formatBSDate(event.startDate)} -{" "}
+                          {formatBSDate(event.endDate)}
                         </span>
                       </div>
                       {event.topics.length > 0 && (

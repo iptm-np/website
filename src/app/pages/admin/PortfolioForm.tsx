@@ -9,6 +9,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
+import { BSDatePicker } from "../../components/ui/bs-date-picker";
 import { Textarea } from "../../components/ui/textarea";
 import { RichTextEditor } from "../../components/ui/rich-text-editor";
 import { Checkbox } from "../../components/ui/checkbox";
@@ -991,25 +992,25 @@ export function PortfolioForm() {
               </h3>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <Label>Start Date</Label>
-                  <Input
-                    type="date"
+                  <Label htmlFor="portfolio-startDate-year">Start Date (BS)</Label>
+                  <BSDatePicker
+                    key={`${editingId || "new"}-startDate`}
+                    id="portfolio-startDate"
+                    label="Start date"
                     value={form.startDate || ""}
-                    onChange={(event) =>
-                      updateForm("startDate", event.target.value)
-                    }
+                    onChange={(value) => updateForm("startDate", value)}
                   />
                 </div>
 
                 <div>
-                  <Label>End Date</Label>
-                  <Input
-                    type="date"
+                  <Label htmlFor="portfolio-endDate-year">End Date (BS)</Label>
+                  <BSDatePicker
+                    key={`${editingId || "new"}-endDate`}
+                    id="portfolio-endDate"
+                    label="End date"
                     value={form.endDate || ""}
-                    onChange={(event) =>
-                      updateForm("endDate", event.target.value)
-                    }
-                    aria-invalid={Boolean(errors.endDate)}
+                    onChange={(value) => updateForm("endDate", value)}
+                    ariaInvalid={Boolean(errors.endDate)}
                   />
                   {getFieldError(errors, "endDate")}
                 </div>

@@ -28,6 +28,7 @@ const engineering = new URL("../../imports/og-image.webp", import.meta.url)
   .href;
 import { Helmet } from "react-helmet-async";
 import { slugify } from "../../utils/slug";
+import { formatBSDate } from "../../utils/nepaliDate";
 
 const portfolioTypeLabels: Record<PublicPortfolioType, string> = {
   project: "Events & Workshops",
@@ -40,7 +41,10 @@ const getLocalDateKey = (date: Date) => format(date, "yyyy-MM-dd");
 
 const formatTrainingDate = (date: string) => {
   const parsedDate = parseISO(date);
-  return isValid(parsedDate) ? format(parsedDate, "MMM d, yyyy") : date;
+  if (!isValid(parsedDate)) return date;
+
+  const formattedDate = formatBSDate(date);
+  return formattedDate === date ? format(parsedDate, "MMM d, yyyy") : formattedDate;
 };
 
 const hasCurrentOrFutureEndDate = (

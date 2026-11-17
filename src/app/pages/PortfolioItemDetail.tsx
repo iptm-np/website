@@ -12,6 +12,7 @@ import { useContent } from "../contexts/ContentContext";
 import { PublicPortfolioItem, PublicPortfolioType } from "../../types/portfolio.types";
 import { formatContractAmount, getPublicPortfolioItems } from "../../services/portfolio.service";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
+import { formatBSDate } from "../../utils/nepaliDate";
 
 const typeLabels: Record<PublicPortfolioType, string> = {
   project: "Events & Workshops",
@@ -226,8 +227,10 @@ export function PortfolioItemDetail({
             <div>
               <dt className="text-slate-500">Timeline</dt>
               <dd className="mt-1 font-semibold text-slate-900">
-                {[item.startDate, item.endDate].filter(Boolean).join(" - ") ||
-                  "-"}
+                {[item.startDate, item.endDate]
+                  .filter((date): date is string => Boolean(date))
+                  .map((date) => formatBSDate(date))
+                  .join(" - ") || "-"}
               </dd>
             </div>
             {item.type === "training" && (

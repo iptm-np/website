@@ -5,6 +5,7 @@ import { Card, CardContent } from '../components/ui/card';
 import { Calendar, Clock, CheckCircle, ArrowLeft, Tag } from 'lucide-react';
 import { PortfolioItemDetail } from './PortfolioItemDetail';
 import { SanitizedHtml } from '../components/ui/sanitized-html';
+import { formatBSDate } from "../../utils/nepaliDate";
 
 interface EventDetailProps {
   backTo?: string;
@@ -55,7 +56,7 @@ export function EventDetail({ backTo = "/training" }: EventDetailProps) {
             </span>
             <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm flex items-center gap-2">
               <Calendar className="h-3 w-3" />
-              {event.startDate} - {event.endDate}
+              {formatBSDate(event.startDate)} - {formatBSDate(event.endDate)}
             </span>
             <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm flex items-center gap-2">
               <Clock className="h-3 w-3" />
@@ -100,11 +101,11 @@ export function EventDetail({ backTo = "/training" }: EventDetailProps) {
                 <Calendar className="h-8 w-8 text-brand-600 mb-3" />
                 <h3 className="font-semibold mb-2">Dates</h3>
                 <p className="text-sm text-gray-600">
-                  {event.startDate}
+                  {formatBSDate(event.startDate)}
                   <br />
                   to
                   <br />
-                  {event.endDate}
+                  {formatBSDate(event.endDate)}
                 </p>
               </CardContent>
             </Card>
@@ -167,7 +168,7 @@ export function EventDetail({ backTo = "/training" }: EventDetailProps) {
                       />
                       <div className="flex items-center text-xs text-gray-500 gap-2">
                         <Calendar className="h-3 w-3" />
-                        <span>{relatedEvent.startDate}</span>
+                        <span>{formatBSDate(relatedEvent.startDate)}</span>
                       </div>
                     </CardContent>
                   </Card>

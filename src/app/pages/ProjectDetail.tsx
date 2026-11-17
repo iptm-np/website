@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import { PortfolioItemDetail } from "./PortfolioItemDetail";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
+import { formatBSDate } from "../../utils/nepaliDate";
 
 export function ProjectDetail() {
   const { slug } = useParams();
@@ -39,6 +40,9 @@ export function ProjectDetail() {
 
   const clientName =
     clients.find((c) => c.id === project.clientId)?.name || project.clientName;
+  const formattedCompletionDate = project.completionDate
+    ? formatBSDate(project.completionDate)
+    : "";
 
   return (
     <div>
@@ -121,7 +125,9 @@ export function ProjectDetail() {
                   <div className="flex items-center justify-center gap-1">
                     <Calendar className="h-4 w-4 text-brand-600" />
                     <p className="font-semibold text-lg">
-                      {new Date(project.completionDate).toLocaleDateString()}
+                      {formattedCompletionDate === project.completionDate
+                        ? new Date(project.completionDate).toLocaleDateString()
+                        : formattedCompletionDate}
                     </p>
                   </div>
                 </div>
