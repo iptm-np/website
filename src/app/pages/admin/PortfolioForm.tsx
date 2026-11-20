@@ -181,9 +181,11 @@ export function PortfolioForm() {
 
     const existing = portfolio.find((item) => item.slug === editingSlug);
     if (existing) {
+      const { displayOnHome: _legacyDisplayOnHome, ...existingItem } = existing;
       setForm({
         ...createEmptyForm(),
-        ...existing,
+        ...existingItem,
+        featuredWork: existing.featuredWork === true,
         mode: existing.mode === "online" ? "online" : "physical",
         address: existing.address || existing.location || "",
       });
@@ -380,7 +382,12 @@ export function PortfolioForm() {
   };
 
   const getPayload = () => {
-    const { id: _omitId, status, ...payload } = form;
+    const {
+      id: _omitId,
+      status,
+      displayOnHome: _legacyDisplayOnHome,
+      ...payload
+    } = form;
     const now = new Date().toISOString();
     const slug =
       form.slug.trim() ||
@@ -389,7 +396,7 @@ export function PortfolioForm() {
 
     return {
       ...payload,
-      ...(status ? { status } : {}),
+      ...(status && form.type !== "training" ? { status } : {}),
       title: form.title.trim(),
       slug,
       shortDescription: form.shortDescription.trim(),
@@ -410,7 +417,7 @@ export function PortfolioForm() {
       venue: form.venue?.trim(),
       address: form.address?.trim(),
       registerLink: form.registerLink?.trim(),
-      displayOnHome: Boolean(form.displayOnHome),
+      featuredWork: form.featuredWork === true,
       updatedAt: now,
       createdAt: form.createdAt || now,
     };
@@ -453,15 +460,6 @@ export function PortfolioForm() {
     if (form.startDate && form.endDate && form.endDate < form.startDate) {
       nextErrors.endDate = "End date cannot be before start date";
     }
-    if (form.displayOnHome) {
-      if (!form.startDate) {
-        nextErrors.startDate = "Start date is required for featured items";
-      }
-      if (!form.endDate) {
-        nextErrors.endDate = "End date is required for featured items";
-      }
-    }
-
     return nextErrors;
   };
 
@@ -572,24 +570,26 @@ export function PortfolioForm() {
                   </Select>
                 </div>
 
-                <div>
-                  <Label>Status</Label>
-                  <Select
-                    value={form.status}
-                    onValueChange={(value) =>
-                      updateForm("status", value as PortfolioStatus)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="upcoming">Upcoming</SelectItem>
-                      <SelectItem value="ongoing">Ongoing</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {form.type !== "training" && (
+                  <div>
+                    <Label>Status</Label>
+                    <Select
+                      value={form.status}
+                      onValueChange={(value) =>
+                        updateForm("status", value as PortfolioStatus)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="upcoming">Upcoming</SelectItem>
+                        <SelectItem value="ongoing">Ongoing</SelectItem>
+                        <SelectItem value="completed">Completed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
 
                 <div>
                   <Label>Fiscal Year *</Label>
@@ -689,22 +689,36 @@ export function PortfolioForm() {
               <label className="flex items-start gap-3 rounded-lg border p-3 text-sm">
                 <Checkbox
                   className="mt-0.5"
-                  checked={Boolean(form.displayOnHome)}
+                  checked={form.featuredWork === true}
                   onCheckedChange={(checked) =>
-                    updateForm("displayOnHome", checked === true)
+                    updateForm("featuredWork", checked === true)
                   }
                 />
                 <span>
-                  <span className="font-medium">Feature on Homepage</span>
+                  <span className="font-medium">Display on Home Page</span>
                   <p className="text-gray-500">
-                    {form.type === "training"
-                      ? "Show this training on the homepage and training listing until its end date has passed. Start and end dates are required."
-                      : form.type === "consulting"
-                        ? "Show this consulting service in featured work on the homepage and on the consulting listing. Start and end dates are required."
-                        : "Show this event/workshop on the homepage until its end date has passed. Start and end dates are required."}
+                    Show this item in the homepage Featured Work section. Up to 15 selected items are displayed.
                   </p>
                 </span>
               </label>
+
+              {form.type === "training" && (
+                <label className="flex items-start gap-3 rounded-lg border p-3 text-sm">
+                  <Checkbox
+                    className="mt-0.5"
+                    checked={Boolean(form.isInternationalTraining)}
+                    onCheckedChange={(checked) =>
+                      updateForm("isInternationalTraining", checked === true)
+                    }
+                  />
+                  <span>
+                    <span className="font-medium">International Training</span>
+                    <p className="text-gray-500">
+                      Also show this training on the International Training page.
+                    </p>
+                  </span>
+                </label>
+              )}
 
             </div>
 
@@ -992,26 +1006,63 @@ export function PortfolioForm() {
               </h3>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <Label htmlFor="portfolio-startDate-year">Start Date (BS)</Label>
-                  <BSDatePicker
-                    key={`${editingId || "new"}-startDate`}
-                    id="portfolio-startDate"
-                    label="Start date"
-                    value={form.startDate || ""}
-                    onChange={(value) => updateForm("startDate", value)}
-                  />
+                  {form.type === "training" ? (
+                    <>
+                      <Label htmlFor="portfolio-startDate">Start Date</Label>
+                      <Input
+                        id="portfolio-startDate"
+                        type="date"
+                        value={form.startDate || ""}
+                        onChange={(event) =>
+                          updateForm("startDate", event.target.value)
+                        }
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Label htmlFor="portfolio-startDate-year">
+                        Start Date (BS)
+                      </Label>
+                      <BSDatePicker
+                        key={`${editingId || "new"}-startDate`}
+                        id="portfolio-startDate"
+                        label="Start date"
+                        value={form.startDate || ""}
+                        onChange={(value) => updateForm("startDate", value)}
+                      />
+                    </>
+                  )}
                 </div>
 
                 <div>
-                  <Label htmlFor="portfolio-endDate-year">End Date (BS)</Label>
-                  <BSDatePicker
-                    key={`${editingId || "new"}-endDate`}
-                    id="portfolio-endDate"
-                    label="End date"
-                    value={form.endDate || ""}
-                    onChange={(value) => updateForm("endDate", value)}
-                    ariaInvalid={Boolean(errors.endDate)}
-                  />
+                  {form.type === "training" ? (
+                    <>
+                      <Label htmlFor="portfolio-endDate">End Date</Label>
+                      <Input
+                        id="portfolio-endDate"
+                        type="date"
+                        value={form.endDate || ""}
+                        onChange={(event) =>
+                          updateForm("endDate", event.target.value)
+                        }
+                        aria-invalid={Boolean(errors.endDate)}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Label htmlFor="portfolio-endDate-year">
+                        End Date (BS)
+                      </Label>
+                      <BSDatePicker
+                        key={`${editingId || "new"}-endDate`}
+                        id="portfolio-endDate"
+                        label="End date"
+                        value={form.endDate || ""}
+                        onChange={(value) => updateForm("endDate", value)}
+                        ariaInvalid={Boolean(errors.endDate)}
+                      />
+                    </>
+                  )}
                   {getFieldError(errors, "endDate")}
                 </div>
               </div>

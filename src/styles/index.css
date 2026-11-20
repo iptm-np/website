@@ -2,6 +2,18 @@
 @import './tailwind.css';
 @import './theme.css';
 
+.featured-work-viewport {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
+  scroll-behavior: auto;
+  touch-action: pan-x;
+}
+
+.featured-work-viewport::-webkit-scrollbar {
+  display: none;
+}
+
 /* ========================================
    IPTM NEPAL PRELOADER
 ======================================== */

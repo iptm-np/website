@@ -49,7 +49,11 @@ export const router = createBrowserRouter([
       { path: 'company-profile', Component: CompanyProfile },
       { path: 'team', Component: Team },
       { path: 'team/:slug', Component: TeamMemberDetail },
-      { path: 'training', Component: Training },
+      { path: 'training', element: <Training trainingPage="upcoming" /> },
+      { path: 'training/upcoming', element: <Training trainingPage="upcoming" /> },
+      { path: 'training/ongoing', element: <Training trainingPage="ongoing" /> },
+      { path: 'training/completed', element: <Training trainingPage="completed" /> },
+      { path: 'training/international', element: <Training trainingPage="international" /> },
       { path: 'training/:slug', Component: EventDetail },
       { path: 'events-workshops', Component: EventsWorkshops },
       {

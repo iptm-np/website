@@ -79,7 +79,9 @@ export function PortfolioSection() {
       const matchesType = typeFilter === "all" || item.type === typeFilter;
       const matchesFeatured =
         featuredFilter === "all" ||
-        (featuredFilter === "featured" ? item.displayOnHome : !item.displayOnHome);
+        (featuredFilter === "featured"
+          ? item.featuredWork === true
+          : item.featuredWork !== true);
       const clientName = clients.find((c) => c.id === item.clientId)?.name;
       const matchesSearch =
         !search ||
@@ -176,7 +178,7 @@ export function PortfolioSection() {
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-semibold">{item.title}</h3>
-                      {item.displayOnHome && (
+                      {item.featuredWork === true && (
                         <span className="rounded bg-slate-100 px-2 py-1 text-xs font-semibold text-brand-800">
                           Featured on Home
                         </span>

@@ -21,7 +21,11 @@ import {
 } from "lucide-react";
 import { useContent } from "../contexts/ContentContext";
 import { PublicPortfolioItem, PublicPortfolioType } from "../../types/portfolio.types";
-import { getPublicPortfolioItems } from "../../services/portfolio.service";
+import {
+  getMillisecondsUntilNepalMidnight,
+  getPublicPortfolioItems,
+  getTrainingStatus,
+} from "../../services/portfolio.service";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
 import { format, isValid, parseISO } from "date-fns";
 const engineering = new URL("../../imports/og-image.webp", import.meta.url)
@@ -35,10 +39,6 @@ const portfolioTypeLabels: Record<PublicPortfolioType, string> = {
   training: "Training",
   consulting: "Consulting",
 };
-const FEATURED_WORK_SCROLL_DURATION = 80_000;
-
-const getLocalDateKey = (date: Date) => format(date, "yyyy-MM-dd");
-
 const formatTrainingDate = (date: string) => {
   const parsedDate = parseISO(date);
   if (!isValid(parsedDate)) return date;
@@ -47,38 +47,26 @@ const formatTrainingDate = (date: string) => {
   return formattedDate === date ? format(parsedDate, "MMM d, yyyy") : formattedDate;
 };
 
-const hasCurrentOrFutureEndDate = (
-  endDate: string | undefined,
-  today: string,
-) => {
-  if (!endDate) return false;
-  const parsedDate = parseISO(endDate);
-  return isValid(parsedDate) && format(parsedDate, "yyyy-MM-dd") >= today;
-};
-
 export function Home() {
   const { clients, portfolio, heroImages } = useContent();
   const [heroApi, setHeroApi] = useState<CarouselApi | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [featuredWorkPaused, setFeaturedWorkPaused] = useState(false);
-  const [today, setToday] = useState(() => getLocalDateKey(new Date()));
+  const [now, setNow] = useState(() => new Date());
   const featuredMarqueeRef = useRef<HTMLDivElement | null>(null);
   const featuredTrackRef = useRef<HTMLDivElement | null>(null);
+  const featuredGroupRef = useRef<HTMLDivElement | null>(null);
+  const featuredPauseUntilRef = useRef(0);
+  const featuredHoveredRef = useRef(false);
+  const [featuredLoopCopies, setFeaturedLoopCopies] = useState(2);
 
   useEffect(() => {
-    const now = new Date();
-    const nextMidnight = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + 1,
-    );
     const timeout = window.setTimeout(
-      () => setToday(getLocalDateKey(new Date())),
-      nextMidnight.getTime() - now.getTime(),
+      () => setNow(new Date()),
+      getMillisecondsUntilNepalMidnight(now),
     );
 
     return () => window.clearTimeout(timeout);
-  }, [today]);
+  }, [now]);
 
   // Auto-play carousel
   useEffect(() => {
@@ -111,47 +99,97 @@ export function Home() {
     .filter(
       (item) =>
         item.type === "training" &&
-        item.displayOnHome &&
-        hasCurrentOrFutureEndDate(item.endDate, today),
+        getTrainingStatus(item.startDate, item.endDate, now) === "upcoming",
     )
-    .sort((a, b) => (a.startDate || "").localeCompare(b.startDate || ""))
-    .slice(0, 3);
-  const featuredPortfolioItems = getPublicPortfolioItems(portfolio).filter(
-    (item) => item.type === "project" && item.displayOnHome,
-  );
-  const featuredItemsPerLoop =
-    featuredPortfolioItems.length > 0
-      ? Math.max(1, Math.ceil(4 / featuredPortfolioItems.length))
-      : 1;
-  const featuredLoopItems = Array.from(
-    { length: featuredItemsPerLoop },
-    () => featuredPortfolioItems,
-  ).flat();
+    .sort((a, b) => (a.startDate || "").localeCompare(b.startDate || ""));
+  const featuredPortfolioItems = getPublicPortfolioItems(portfolio)
+    .filter((item) => item.featuredWork === true)
+    .slice(0, 15);
+
+  useEffect(() => {
+    const viewport = featuredMarqueeRef.current;
+    const group = featuredGroupRef.current;
+    if (!viewport || !group) return;
+
+    const updateCopies = () => {
+      const groupWidth = group.getBoundingClientRect().width;
+      if (!groupWidth) return;
+      setFeaturedLoopCopies(
+        Math.max(3, Math.ceil(viewport.clientWidth / groupWidth) + 2),
+      );
+    };
+
+    updateCopies();
+    const observer = new ResizeObserver(updateCopies);
+    observer.observe(viewport);
+    observer.observe(group);
+
+    return () => observer.disconnect();
+  }, [featuredPortfolioItems.length]);
+
+  useEffect(() => {
+    const viewport = featuredMarqueeRef.current;
+    const group = featuredGroupRef.current;
+    if (!viewport || !group) return;
+
+    const groupWidth = group.getBoundingClientRect().width;
+    if (!groupWidth) return;
+
+    if (viewport.scrollLeft < groupWidth || viewport.scrollLeft >= groupWidth * 2) {
+      viewport.scrollLeft = groupWidth;
+    }
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frameId = 0;
+    let previousTimestamp = 0;
+
+    const animate = (timestamp: number) => {
+      const elapsed = previousTimestamp ? timestamp - previousTimestamp : 0;
+      previousTimestamp = timestamp;
+
+      const currentGroupWidth = group.getBoundingClientRect().width;
+      if (currentGroupWidth) {
+        while (viewport.scrollLeft >= currentGroupWidth * 2) {
+          viewport.scrollLeft -= currentGroupWidth;
+        }
+        while (viewport.scrollLeft < currentGroupWidth) {
+          viewport.scrollLeft += currentGroupWidth;
+        }
+
+        if (
+          !reducedMotion.matches &&
+          !featuredHoveredRef.current &&
+          timestamp >= featuredPauseUntilRef.current
+        ) {
+          viewport.scrollLeft += elapsed * 0.018;
+        }
+      }
+
+      frameId = window.requestAnimationFrame(animate);
+    };
+
+    frameId = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [featuredLoopCopies, featuredPortfolioItems.length]);
+
+  const pauseFeaturedWork = (duration = 1800) => {
+    featuredPauseUntilRef.current = Date.now() + duration;
+  };
 
   const moveFeaturedWork = (direction: -1 | 1) => {
     const track = featuredTrackRef.current;
-    const group = track?.firstElementChild;
-    const firstCard = group?.firstElementChild;
+    const firstGroup = track?.firstElementChild;
+    const firstCard = firstGroup?.firstElementChild;
     const nextCard = firstCard?.nextElementSibling;
-    if (!track || !group || !firstCard || !nextCard) return;
+    if (!track || !firstCard || !nextCard) return;
 
+    pauseFeaturedWork(2500);
     const stepWidth =
       nextCard.getBoundingClientRect().left - firstCard.getBoundingClientRect().left;
-    const animation = track.getAnimations()[0];
-
-    if (!animation) {
-      featuredMarqueeRef.current?.scrollBy({ left: direction * stepWidth });
-      return;
-    }
-
-    const stepDuration =
-      (FEATURED_WORK_SCROLL_DURATION * stepWidth) /
-      group.getBoundingClientRect().width;
-    const currentTime = Number(animation.currentTime ?? 0);
-    animation.currentTime =
-      ((currentTime + direction * stepDuration) % FEATURED_WORK_SCROLL_DURATION +
-        FEATURED_WORK_SCROLL_DURATION) %
-      FEATURED_WORK_SCROLL_DURATION;
+    featuredMarqueeRef.current?.scrollBy({
+      left: direction * stepWidth,
+      behavior: "smooth",
+    });
   };
 
   const getPortfolioLink = (item: PublicPortfolioItem) => {
@@ -531,25 +569,6 @@ export function Home() {
 
         {/* Featured Work */}
         <section className="py-16">
-          <style>{`
-            @keyframes featured-work-scroll {
-              to { transform: translateX(-50%); }
-            }
-            .featured-work-track {
-              animation: featured-work-scroll ${FEATURED_WORK_SCROLL_DURATION / 1000}s linear infinite;
-            }
-            .featured-work-track.featured-work-paused {
-              animation-play-state: paused;
-            }
-            .featured-work-marquee:hover .featured-work-track,
-            .featured-work-marquee:focus-within .featured-work-track {
-              animation-play-state: paused;
-            }
-            @media (prefers-reduced-motion: reduce) {
-              .featured-work-marquee { overflow-x: auto; }
-              .featured-work-track { animation: none; }
-            }
-          `}</style>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div className="text-center sm:text-left">
@@ -558,65 +577,70 @@ export function Home() {
                   Explore our training, events & workshops and consulting services
                 </p>
               </div>
-              <div
-                className="flex items-center gap-2 self-center sm:self-auto"
-                onMouseLeave={() => setFeaturedWorkPaused(false)}
-                onBlurCapture={(event) => {
-                  if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                    setFeaturedWorkPaused(false);
-                  }
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFeaturedWorkPaused(true);
-                    moveFeaturedWork(-1);
-                  }}
-                  aria-label="Previous featured work"
-                  title="Previous featured work"
-                  className="flex size-9 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
-                >
-                  <ChevronLeft className="size-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFeaturedWorkPaused(true);
-                    moveFeaturedWork(1);
-                  }}
-                  aria-label="Next featured work"
-                  title="Next featured work"
-                  className="flex size-9 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
-                >
-                  <ChevronRight className="size-4" />
-                </button>
-              </div>
+              {featuredPortfolioItems.length > 1 && (
+                <div className="flex items-center gap-2 self-center sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={() => moveFeaturedWork(-1)}
+                    aria-label="Previous featured work"
+                    title="Previous featured work"
+                    className="flex size-9 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
+                  >
+                    <ChevronLeft className="size-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveFeaturedWork(1)}
+                    aria-label="Next featured work"
+                    title="Next featured work"
+                    className="flex size-9 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
+                  >
+                    <ChevronRight className="size-4" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {featuredPortfolioItems.length > 0 ? (
               <div
                 ref={featuredMarqueeRef}
-                className="featured-work-marquee overflow-hidden"
+                className="featured-work-viewport overflow-x-auto"
+                onMouseEnter={() => {
+                  featuredHoveredRef.current = true;
+                }}
+                onMouseLeave={() => {
+                  featuredHoveredRef.current = false;
+                  pauseFeaturedWork();
+                }}
+                onPointerDown={() => pauseFeaturedWork()}
+                onTouchStart={() => pauseFeaturedWork()}
+                onTouchMove={() => pauseFeaturedWork()}
+                onPointerMove={(event) => {
+                  if (event.buttons > 0) pauseFeaturedWork();
+                }}
+                onWheel={() => pauseFeaturedWork()}
+                onKeyDown={() => pauseFeaturedWork()}
+                tabIndex={0}
+                aria-label="Featured work. Scroll horizontally to browse."
               >
                 <div
                   ref={featuredTrackRef}
-                  className={`featured-work-track flex w-max${featuredWorkPaused ? " featured-work-paused" : ""
-                    }`}
+                  className="flex w-max"
                 >
-                  {[0, 1].map((copy) => (
+                  {Array.from({ length: featuredLoopCopies }, (_, copy) => (
                     <div
-                      key={copy}
+                      key={`featured-copy-${copy}`}
+                      ref={copy === 0 ? featuredGroupRef : undefined}
                       className="flex shrink-0 gap-8 pr-8"
-                      aria-hidden={copy === 1}
-                      inert={copy === 1}
+                      aria-hidden={copy > 0}
+                      inert={copy > 0}
                     >
-                      {featuredLoopItems.map((item, index) => (
+                      {featuredPortfolioItems.map((item) => (
                         <Link
-                          key={`${copy}-${item.id}-${index}`}
+                          key={`${copy}-${item.id}`}
                           to={getPortfolioLink(item)}
+                          tabIndex={copy === 0 ? undefined : -1}
                           className="group w-[85vw] max-w-sm shrink-0 md:w-[38vw] lg:w-[30vw]"
-                          tabIndex={copy === 1 ? -1 : undefined}
                         >
                           <Card className="h-full cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-xl">
                             <div className="overflow-hidden">

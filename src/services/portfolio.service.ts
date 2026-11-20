@@ -84,6 +84,59 @@ export function sortByStartDateDesc<T extends { startDate?: string | null }>(
   });
 }
 
+function dateKeyInNepal(date: Date) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Kathmandu',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((value) => value.type === type)?.value;
+  const year = part('year');
+  const month = part('month');
+  const day = part('day');
+  return year && month && day ? `${year}-${month}-${day}` : null;
+}
+
+export function getMillisecondsUntilNepalMidnight(now: Date = new Date()) {
+  const today = dateKeyInNepal(now);
+  if (!today) return 60_000;
+
+  const [year, month, day] = today.split('-').map(Number);
+  const nextMidnightUtc = Date.UTC(year, month - 1, day + 1) - 345 * 60 * 1000;
+  return Math.max(1000, nextMidnightUtc - now.getTime() + 50);
+}
+
+export function getTrainingStatus(
+  startDate?: string | null,
+  endDate?: string | null,
+  now: Date = new Date(),
+): PortfolioStatus | undefined {
+  const parseDateKey = (value?: string | null) => {
+    const match = /^(\d{4}-\d{2}-\d{2})(?:T.*)?$/.exec(value || '');
+    if (!match) return null;
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value || '')) {
+      return isValidADDateKey(match[1]) ? match[1] : null;
+    }
+
+    const timestamp = new Date(value || '');
+    return Number.isNaN(timestamp.getTime())
+      ? null
+      : dateKeyInNepal(timestamp);
+  };
+
+  const start = parseDateKey(startDate);
+  const end = parseDateKey(endDate);
+  const today = dateKeyInNepal(now);
+  if (!start || !today || (end && start > end)) return undefined;
+  if (today < start) return 'upcoming';
+  if (!end) return undefined;
+  if (today > end) return 'completed';
+  return 'ongoing';
+}
+
 /**
  * Sort portfolio items by specified key and order
  */

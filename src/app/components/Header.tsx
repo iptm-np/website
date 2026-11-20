@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { Mail, Menu, X } from 'lucide-react';
+import { ChevronDown, Mail, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useContent } from '../contexts/ContentContext';
 import { SiInstagram, SiFacebook, SiYoutube, SiTiktok, SiX } from 'react-icons/si';
@@ -9,9 +9,13 @@ import logoNoBgImage from '../../imports/iptm-logo-nobg.png';
 export function Header() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [trainingMenuOpen, setTrainingMenuOpen] = useState(false);
   const { contactInfo } = useContent();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) =>
+    path === '/training/upcoming'
+      ? location.pathname.startsWith('/training')
+      : location.pathname === path;
   const isAdmin = location.pathname.startsWith('/admin');
 
   if (isAdmin) {
@@ -24,11 +28,22 @@ export function Header() {
     { path: '/company-profile', label: 'Company Profile' },
     { path: '/portfolio', label: 'Portfolio' },
     { path: '/consulting', label: 'Consulting' },
-    { path: '/training', label: 'Training' },
+    { path: '/training/upcoming', label: 'Training' },
     { path: '/events-workshops', label: 'Events & Workshops' },
     { path: '/gallery', label: 'Gallery' },
     { path: '/contact', label: 'Contact Us' },
   ];
+
+  const trainingLinks = [
+    { path: '/training/upcoming', label: 'Upcoming Training' },
+    { path: '/training/ongoing', label: 'Ongoing Training' },
+    { path: '/training/completed', label: 'Completed Training' },
+    { path: '/training/international', label: 'International Training' },
+  ];
+
+  const isTrainingPageActive = (path: string) =>
+    location.pathname === path ||
+    (path === '/training/upcoming' && location.pathname === '/training');
 
   const socialLinks = [
     { label: 'Instagram', href: contactInfo?.instagram, icon: SiInstagram },
@@ -54,17 +69,73 @@ export function Header() {
       {/* Desktop Navigation */}
       <nav className="hidden md:flex space-x-8">
         {navLinks.map((link) => (
-          <Link
-            key={link.path}
-            to={link.path}
-            className={`text-sm font-medium transition-colors ${
-              isActive(link.path)
-                ? 'text-white'
-                : 'text-white/90 hover:text-white'
-            }`}
-          >
-            {link.label}
-          </Link>
+          link.path === '/training/upcoming' ? (
+            <div
+              key={link.path}
+              className="relative"
+              onMouseEnter={() => setTrainingMenuOpen(true)}
+              onMouseLeave={() => setTrainingMenuOpen(false)}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') setTrainingMenuOpen(false);
+              }}
+            >
+              <button
+                type="button"
+                aria-haspopup="true"
+                aria-expanded={trainingMenuOpen}
+                onClick={() => setTrainingMenuOpen(true)}
+                className={`flex items-center gap-1 text-sm font-medium transition-colors ${
+                  isActive(link.path)
+                    ? 'text-white'
+                    : 'text-white/90 hover:text-white'
+                }`}
+              >
+                {link.label}
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform ${
+                    trainingMenuOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+              {trainingMenuOpen && (
+                <div className="absolute left-0 top-full z-50 w-56 pt-2">
+                  <div className="overflow-hidden rounded-md bg-white py-1 shadow-lg ring-1 ring-black/10">
+                    {trainingLinks.map((trainingLink) => (
+                      <Link
+                        key={trainingLink.path}
+                        to={trainingLink.path}
+                        aria-current={
+                          isTrainingPageActive(trainingLink.path)
+                            ? 'page'
+                            : undefined
+                        }
+                        onClick={() => setTrainingMenuOpen(false)}
+                        className={`block px-4 py-2.5 text-sm transition-colors ${
+                          isTrainingPageActive(trainingLink.path)
+                            ? 'bg-brand-50 font-semibold text-brand-700'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-brand-700'
+                        }`}
+                      >
+                        {trainingLink.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`text-sm font-medium transition-colors ${
+                isActive(link.path)
+                  ? 'text-white'
+                  : 'text-white/90 hover:text-white'
+              }`}
+            >
+              {link.label}
+            </Link>
+          )
         ))}
       </nav>
 
@@ -115,18 +186,67 @@ export function Header() {
       <div className="md:hidden pb-4">
         <nav className="flex flex-col space-y-4">
           {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`text-sm font-medium ${
-                isActive(link.path)
-                  ? 'text-white'
-                  : 'text-white/90'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
+            link.path === '/training/upcoming' ? (
+              <div key={link.path}>
+                <button
+                  type="button"
+                  aria-haspopup="true"
+                  aria-expanded={trainingMenuOpen}
+                  onClick={() => setTrainingMenuOpen((open) => !open)}
+                  className={`flex w-full items-center justify-between text-left text-sm font-medium ${
+                    isActive(link.path)
+                      ? 'text-white'
+                      : 'text-white/90'
+                  }`}
+                >
+                  {link.label}
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      trainingMenuOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                {trainingMenuOpen && (
+                  <div className="mt-3 flex flex-col gap-3 border-l border-white/30 pl-4">
+                    {trainingLinks.map((trainingLink) => (
+                      <Link
+                        key={trainingLink.path}
+                        to={trainingLink.path}
+                        aria-current={
+                          isTrainingPageActive(trainingLink.path)
+                            ? 'page'
+                            : undefined
+                        }
+                        className={`text-sm ${
+                          isTrainingPageActive(trainingLink.path)
+                            ? 'font-semibold text-white'
+                            : 'text-white/80 hover:text-white'
+                        }`}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setTrainingMenuOpen(false);
+                        }}
+                      >
+                        {trainingLink.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`text-sm font-medium ${
+                  isActive(link.path)
+                    ? 'text-white'
+                    : 'text-white/90'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            )
           ))}
         </nav>
 

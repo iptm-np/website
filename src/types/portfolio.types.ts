@@ -48,11 +48,14 @@ export interface PortfolioItem {
   contractAmount?: string;
   serviceType?: string;
   trainingType?: string;
+  isInternationalTraining?: boolean;
   mode?: 'online' | 'physical';
   platform?: string;
   venue?: string;
   address?: string;
   registerLink?: string;
+  featuredWork?: boolean;
+  /** @deprecated Legacy flag; use featuredWork for manual homepage selection. */
   displayOnHome?: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -79,6 +82,7 @@ export const defaultPortfolioFormData: PortfolioItem = {
   contractAmount: '',
   serviceType: '',
   trainingType: '',
+  isInternationalTraining: false,
   mode: 'physical',
-  displayOnHome: false,
+  featuredWork: false,
 };

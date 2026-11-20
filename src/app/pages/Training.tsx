@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import {
@@ -18,19 +18,47 @@ import { useContent } from "../contexts/ContentContext";
 import { PageHeroBackground } from "../components/PageHeroBackground";
 import { SanitizedHtml } from "../components/ui/sanitized-html";
 import { PortfolioFilters as PortfolioFiltersComponent } from "../components/portfolio/PortfolioFilters";
-import { PortfolioFiltersState } from "../../types/portfolio.types";
+import { PortfolioFiltersState, PortfolioStatus } from "../../types/portfolio.types";
 import { formatBSDate } from "../../utils/nepaliDate";
-import { sortByStartDateDesc } from "../../services/portfolio.service";
+import {
+  getMillisecondsUntilNepalMidnight,
+  getTrainingStatus,
+  sortByStartDateDesc,
+} from "../../services/portfolio.service";
 
 interface TrainingProps {
   pageVariant?: "training" | "events-workshops";
+  trainingPage?: "upcoming" | "ongoing" | "completed" | "international";
 }
 
-export function Training({ pageVariant = "training" }: TrainingProps) {
+const trainingPages = [
+  { path: "/training/upcoming", label: "Upcoming Training", page: "upcoming" },
+  { path: "/training/ongoing", label: "Ongoing Training", page: "ongoing" },
+  { path: "/training/completed", label: "Completed Training", page: "completed" },
+  { path: "/training/international", label: "International Training", page: "international" },
+] as const;
+
+const trainingStatusLabels: Record<PortfolioStatus, string> = {
+  upcoming: "Upcoming",
+  ongoing: "Ongoing",
+  completed: "Completed",
+};
+
+const trainingStatusStyles: Record<PortfolioStatus, string> = {
+  upcoming: "bg-blue-50 text-blue-700",
+  ongoing: "bg-emerald-50 text-emerald-700",
+  completed: "bg-slate-100 text-slate-700",
+};
+
+export function Training({
+  pageVariant = "training",
+  trainingPage = "upcoming",
+}: TrainingProps) {
   const isEventsWorkshopsPage = pageVariant === "events-workshops";
   const eventDetailsPath = isEventsWorkshopsPage
     ? "/events-workshops"
     : "/training";
+  const [now, setNow] = useState(() => new Date());
   const { events, portfolio, clients, pageHeroImages } = useContent();
   const [view, setView] = useState<"grid" | "table">("grid");
   const [filters, setFilters] = useState<PortfolioFiltersState>({
@@ -41,8 +69,16 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
     search: "",
   });
 
+  useEffect(() => {
+    const timer = window.setTimeout(
+      () => setNow(new Date()),
+      getMillisecondsUntilNepalMidnight(now),
+    );
+    return () => window.clearTimeout(timer);
+  }, [now]);
+
   const trainingItems = [
-    ...events.map((event) => ({
+    ...(isEventsWorkshopsPage ? events : []).map((event) => ({
       id: `event-${event.id}`,
       title: event.title,
       description: event.description,
@@ -62,6 +98,8 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
       sector: undefined as string | undefined,
       fiscalYear: undefined as string | undefined,
       clientId: undefined as string | undefined,
+      status: undefined as PortfolioStatus | undefined,
+      isInternationalTraining: false,
     })),
     ...portfolio
       .filter((item) =>
@@ -76,7 +114,7 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
           item.type === "project"
             ? item.projectType || "Event / Workshop"
             : item.trainingType || "Training",
-        startDate: item.startDate || item.fiscalYear || "",
+        startDate: item.startDate || "",
         endDate: item.endDate || "",
         duration: "Program",
         topics: [
@@ -103,8 +141,21 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
         sector: item.sector,
         fiscalYear: item.fiscalYear,
         clientId: item.clientId,
+        status: item.type === "training"
+          ? getTrainingStatus(item.startDate, item.endDate, now)
+          : undefined,
+        isInternationalTraining: item.isInternationalTraining === true,
       })),
   ];
+
+  const pageItems = isEventsWorkshopsPage
+    ? trainingItems
+    : trainingItems.filter((item) => {
+        if (trainingPage === "international") {
+          return item.isInternationalTraining;
+        }
+        return item.status === trainingPage;
+      });
 
   const filterValues = {
     sectors: [
@@ -136,7 +187,7 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
     Boolean(filters.search);
 
   const filteredItems = sortByStartDateDesc(
-    trainingItems.filter((item) => {
+    pageItems.filter((item) => {
       const search = (filters.search || "").toLowerCase();
       const matchesSearch =
         !search ||
@@ -168,19 +219,23 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-bold mb-4">
-              {isEventsWorkshopsPage ? "Events & Workshops" : "Training"}
+              {isEventsWorkshopsPage
+                ? "Events & Workshops"
+                : trainingPages.find((page) => page.page === trainingPage)?.label}
             </h1>
             <p className="text-xl text-brand-50 max-w-3xl">
               {isEventsWorkshopsPage
                 ? "Discover events, workshops, seminars, and learning programs organized by IPTM Nepal."
-                : "Professional development programs, workshops, and training sessions organized by IPTM Nepal to enhance skills and knowledge in various sectors."}
+                : trainingPage === "international"
+                  ? "Explore IPTM Nepal's international training programs."
+                  : `Explore ${trainingStatusLabels[trainingPage]} programs and professional development opportunities organized by IPTM Nepal.`}
             </p>
             <div className="mt-8">
-              <p className="text-3xl font-bold">{trainingItems.length}+</p>
+              <p className="text-3xl font-bold">{pageItems.length}+</p>
               <p className="mt-1 text-sm text-brand-100">
                 {isEventsWorkshopsPage
                   ? "Events & Workshops"
-                  : "Training Programs Conducted"}
+                  : trainingPages.find((page) => page.page === trainingPage)?.label}
               </p>
             </div>
           </div>
@@ -195,14 +250,38 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
             <h2 className="text-3xl font-bold mb-4">
               {isEventsWorkshopsPage
                 ? "Events & Workshops"
-                : "Training & Capacity Building Programs"}
+                : trainingPages.find((page) => page.page === trainingPage)?.label}
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               {isEventsWorkshopsPage
                 ? "Explore the events, workshops, seminars, and learning programs organized by IPTM Nepal."
-                : "Explore the training programs, workshops, and professional development courses organized and delivered by IPTM Nepal across various sectors"}
+                : trainingPage === "international"
+                  ? "International programs, regardless of their current schedule."
+                  : `Training programs currently ${trainingPage}.`}
             </p>
           </div>
+
+          {!isEventsWorkshopsPage && (
+            <nav
+              aria-label="Training categories"
+              className="mb-8 flex flex-wrap justify-center gap-2"
+            >
+              {trainingPages.map((page) => (
+                <Link
+                  key={page.page}
+                  to={page.path}
+                  aria-current={trainingPage === page.page ? "page" : undefined}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    trainingPage === page.page
+                      ? "bg-brand-600 text-white"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  }`}
+                >
+                  {page.label}
+                </Link>
+              ))}
+            </nav>
+          )}
 
           {/* Filters */}
           <PortfolioFiltersComponent
@@ -211,7 +290,7 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
             clients={clients}
             pagination={{
               visibleCount: filteredItems.length,
-              filteredCount: trainingItems.length,
+              filteredCount: pageItems.length,
               page: 1,
               totalPages: 1,
               itemLabel: isEventsWorkshopsPage
@@ -252,7 +331,7 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
                   <p className="text-gray-500">
                     {isEventsWorkshopsPage
                       ? "No events or workshops match the selected filters."
-                      : "No training programs match the selected filters."}
+                      : `No ${trainingPage} training programs match the selected filters.`}
                   </p>
                   <Button
                     variant="outline"
@@ -266,7 +345,7 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
                 <p className="text-gray-500">
                   {isEventsWorkshopsPage
                     ? "No events or workshops are available at the moment. Check back soon!"
-                    : "No training programs available at the moment. Check back soon!"}
+                    : `No ${trainingPage} training programs are available at the moment. Check back soon!`}
                 </p>
               )}
             </div>
@@ -298,6 +377,24 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
                     </div>
                     <CardContent className="pt-6">
                       <div className="mb-3 flex flex-wrap gap-2">
+                        {!isEventsWorkshopsPage && (
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-medium ${
+                              event.status
+                                ? trainingStatusStyles[event.status]
+                                : "bg-slate-100 text-slate-600"
+                            }`}
+                          >
+                            {event.status
+                              ? trainingStatusLabels[event.status]
+                              : "Dates unavailable"}
+                          </span>
+                        )}
+                        {event.isInternationalTraining && (
+                          <span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-medium text-violet-700">
+                            International
+                          </span>
+                        )}
                         <span className="px-3 py-1 bg-brand-100 text-brand-600 text-xs rounded-full font-medium capitalize">
                           {event.mode ? `${event.mode} training` : event.duration}
                         </span>
@@ -387,6 +484,11 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
                     <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
                       Fiscal Year
                     </th>
+                    {!isEventsWorkshopsPage && (
+                      <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider">
+                        Status
+                      </th>
+                    )}
                     <th className="px-5 py-4 text-left text-xs font-semibold uppercase tracking-wider"></th>
                   </tr>
                 </thead>
@@ -410,6 +512,21 @@ export function Training({ pageVariant = "training" }: TrainingProps) {
                       <td className="whitespace-nowrap px-5 py-4 text-sm text-slate-700">
                         {event.fiscalYear || "-"}
                       </td>
+                      {!isEventsWorkshopsPage && (
+                        <td className="px-5 py-4">
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-medium ${
+                              event.status
+                                ? trainingStatusStyles[event.status]
+                                : "bg-slate-100 text-slate-600"
+                            }`}
+                          >
+                            {event.status
+                              ? trainingStatusLabels[event.status]
+                              : "Dates unavailable"}
+                          </span>
+                        </td>
+                      )}
                       <td className="px-5 py-4">
                         <Link
                           to={`${eventDetailsPath}/${event.slug}`}
